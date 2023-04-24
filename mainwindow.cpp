@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    QObject::connect(ui->Top, &QPushButton::clicked, this, &MainWindow::on_pushButton_clicked);
 }
 
 MainWindow::~MainWindow()
@@ -15,5 +16,5 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-
+    std::cout << "hello " << std::endl;
 }
