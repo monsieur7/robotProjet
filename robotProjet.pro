@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,13 +25,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        login.cpp \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        myrobot.cpp
 
 HEADERS += \
-        mainwindow.h
+        login.h \
+        mainwindow.h \
+        myrobot.h
 
 FORMS += \
+        login.ui \
         mainwindow.ui
 
 # Default rules for deployment.

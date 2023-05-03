@@ -20,7 +20,7 @@ MyRobot::MyRobot(QObject *parent) : QObject(parent) {
 }
 
 
-void MyRobot::doConnect() {
+bool MyRobot::doConnect() {
     socket = new QTcpSocket(this); // socket creation
     connect(socket, SIGNAL(connected()),this, SLOT(connected()));
     connect(socket, SIGNAL(disconnected()),this, SLOT(disconnected()));
@@ -28,19 +28,21 @@ void MyRobot::doConnect() {
     connect(socket, SIGNAL(readyRead()),this, SLOT(readyRead()));
     qDebug() << "connecting..."; // this is not blocking call
     //socket->connectToHost("LOCALHOST", 15020);
-    socket->connectToHost("192.168.1.106", 15020); // connection to wifibot
+    socket->connectToHost(_ip, _port.toInt()); // connection to wifibot
     // we need to wait...
     if(!socket->waitForConnected(5000)) {
         qDebug() << "Error: " << socket->errorString();
-        return;
+        return false;
     }
     TimerEnvoi->start(75);
+    return true;
 
 }
 
-void MyRobot::disConnect() {
+bool MyRobot::disConnect() {
     TimerEnvoi->stop();
     socket->close();
+    return true;
 }
 
 void MyRobot::connected() {
@@ -69,3 +71,49 @@ void MyRobot::MyTimerSlot() {
     Mutex.unlock();
 }
 
+void MyRobot::setPort(QString port){
+    _port = port;
+}
+
+void MyRobot::setIpAddress(QString ip){
+    _ip = ip;
+}
+
+short MyRobot::Crc16(unsigned char *Adresse_tab , unsigned char Taille_max) {
+    unsigned int Crc = 0xFFFF;
+    unsigned int Polynome = 0xA001;
+    unsigned int CptOctet = 0;
+    unsigned int CptBit = 0;
+    unsigned int Parity= 0;
+
+ Crc = 0xFFFF;
+ Polynome = 0xA001;
+ for ( CptOctet= 0 ; CptOctet < Taille_max ; CptOctet++)  {
+     Crc ^= *( Adresse_tab + CptOctet);
+
+        for ( CptBit = 0; CptBit <= 7 ; CptBit++)   {
+            Parity= Crc;
+            Crc >>= 1;
+            if (Parity%2 == true)
+                Crc ^= Polynome;
+        }
+ }  return(Crc);
+
+}
+
+void MyRobot::sendMovement(int left, int right){
+    DataToSend[2] = left % 241;
+    DataToSend[3] = 0x0;
+    DataToSend[4] = right % 241;
+    DataToSend[5] = 0x0;
+    if(left > 0){
+    DataToSend[6] = DataToSend[6] | 1 << 6;
+    }
+    if(right > 0){
+    DataToSend[6] =  DataToSend[6] | 1 << 4;
+    }
+    short crc = Crc16((unsigned char *)DataToSend.data(), 7);
+    std::cout << std::hex << "crc" << crc << std::endl;
+    DataToSend[7] = crc;
+    DataToSend[8] = (crc >> 8);
+}

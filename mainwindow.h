@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <iostream>
+#include "login.h"
+#include "myrobot.h"
 
 namespace Ui {
 class MainWindow;
@@ -19,8 +21,14 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+    void on_actionSe_connecter_triggered();
+
+    void on_Top_clicked();
+
 private:
     Ui::MainWindow *ui;
+    Login *login;
+    MyRobot robot;
 };
 
 #endif // MAINWINDOW_H
