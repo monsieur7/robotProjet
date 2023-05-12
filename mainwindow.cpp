@@ -30,3 +30,19 @@ void MainWindow::updateUI(){
   //  robot.DataReceived;
 
 }
+
+void MainWindow::on_left_clicked()
+{
+    std::cout << "going bottom " << std::endl;
+
+    robot.sendMovement(80,80);
+}
+
+
+void MainWindow::on_right_clicked()
+{
+    std::cout << "going bottom " << std::endl;
+
+    robot.sendMovement(-80,-80);
+}
+

@@ -24,6 +24,10 @@ private slots:
     void updateUI();
 
 
+    void on_left_clicked();
+
+    void on_right_clicked();
+
 private:
     Ui::MainWindow *ui;
     Login *login;
