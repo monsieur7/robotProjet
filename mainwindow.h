@@ -28,6 +28,22 @@ private slots:
 
     void on_right_clicked();
 
+    void on_Top_pressed();
+
+    void on_Top_released();
+
+    void on_bottom_pressed();
+
+    void on_bottom_released();
+
+    void on_left_pressed();
+
+    void on_left_released();
+
+    void on_right_pressed();
+
+    void on_right_released();
+
 private:
     Ui::MainWindow *ui;
     Login *login;
