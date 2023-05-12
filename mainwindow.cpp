@@ -1,18 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+//QMediaPlayer
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-<<<<<<< HEAD
    QObject::connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI);
-=======
-    //QObject::connect(ui->Top, &QPushButton::clicked, this, &MainWindow::on_Top_clicked);
-   //QObject::connect(ui->, &QPushButton::clicked, this, &MainWindow::on_bottom_clicked);
-   //QObject::connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI);
->>>>>>> a98ef2bc1131fcc0fc55fef2a2b50cba72d93790
+
 
     login = new Login(nullptr, &robot);
 }
@@ -66,12 +61,12 @@ void MainWindow::updateUI(){
 
 
 
-<<<<<<< HEAD
+
 void MainWindow::on_actionSe_d_connecter_triggered()
 {
     robot.disConnect();
 }
-=======
+
 void MainWindow::on_Top_pressed()
 {
     std::cout << "going top " << std::endl;
@@ -118,7 +113,7 @@ void MainWindow::on_left_pressed()
 {
     std::cout << "going left " << std::endl;
 
-    robot.sendMovement(80,80);
+    robot.sendMovement(0,80);
 }
 
 
@@ -134,7 +129,7 @@ void MainWindow::on_right_pressed()
 {
     std::cout << "going right " << std::endl;
 
-    robot.sendMovement(-80,-80);
+    robot.sendMovement(80,0);
 }
 
 
@@ -147,4 +142,3 @@ void MainWindow::on_right_released()
     robot.sendMovement(0,0);
 }
 
->>>>>>> a98ef2bc1131fcc0fc55fef2a2b50cba72d93790
