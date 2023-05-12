@@ -25,6 +25,10 @@ private slots:
 
     void on_bottom_clicked();
 
+    void on_left_clicked();
+
+    void on_right_clicked();
+
 private:
     Ui::MainWindow *ui;
     Login *login;

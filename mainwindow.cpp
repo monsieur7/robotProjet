@@ -38,3 +38,19 @@ void MainWindow::on_bottom_clicked()
 
     robot.sendMovement(-120, -120);
 }
+
+void MainWindow::on_left_clicked()
+{
+    std::cout << "going bottom " << std::endl;
+
+    robot.sendMovement(80,80);
+}
+
+
+void MainWindow::on_right_clicked()
+{
+    std::cout << "going bottom " << std::endl;
+
+    robot.sendMovement(20,20);
+}
+
