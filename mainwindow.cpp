@@ -6,7 +6,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+<<<<<<< HEAD
    QObject::connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI);
+=======
+    //QObject::connect(ui->Top, &QPushButton::clicked, this, &MainWindow::on_Top_clicked);
+   //QObject::connect(ui->, &QPushButton::clicked, this, &MainWindow::on_bottom_clicked);
+   //QObject::connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI);
+>>>>>>> a98ef2bc1131fcc0fc55fef2a2b50cba72d93790
 
     login = new Login(nullptr, &robot);
 }
@@ -60,7 +66,85 @@ void MainWindow::updateUI(){
 
 
 
+<<<<<<< HEAD
 void MainWindow::on_actionSe_d_connecter_triggered()
 {
     robot.disConnect();
 }
+=======
+void MainWindow::on_Top_pressed()
+{
+    std::cout << "going top " << std::endl;
+
+    robot.sendMovement(120,120);
+}
+
+
+
+
+void MainWindow::on_Top_released()
+{
+    std::cout << "stop going top " << std::endl;
+
+    robot.sendMovement(0,0);
+}
+
+
+
+
+void MainWindow::on_bottom_pressed()
+{
+    std::cout << "going bottom " << std::endl;
+
+    robot.sendMovement(-120,-120);
+
+}
+
+
+
+
+void MainWindow::on_bottom_released()
+{
+    std::cout << "stop going bottom " << std::endl;
+
+    robot.sendMovement(0,0);
+}
+
+
+
+
+
+void MainWindow::on_left_pressed()
+{
+    std::cout << "going left " << std::endl;
+
+    robot.sendMovement(80,80);
+}
+
+
+void MainWindow::on_left_released()
+{
+    std::cout << "stop going left " << std::endl;
+
+    robot.sendMovement(0,0);
+}
+
+
+void MainWindow::on_right_pressed()
+{
+    std::cout << "going right " << std::endl;
+
+    robot.sendMovement(-80,-80);
+}
+
+
+
+
+void MainWindow::on_right_released()
+{
+    std::cout << "stop going top " << std::endl;
+
+    robot.sendMovement(0,0);
+}
+
+>>>>>>> a98ef2bc1131fcc0fc55fef2a2b50cba72d93790
