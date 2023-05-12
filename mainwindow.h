@@ -28,6 +28,8 @@ private slots:
 
     void on_right_clicked();
 
+    void on_actionSe_d_connecter_triggered();
+
 private:
     Ui::MainWindow *ui;
     Login *login;
