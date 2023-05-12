@@ -109,9 +109,16 @@ void MyRobot::sendMovement(int left, int right){
     if(left > 0){
     DataToSend[6] = DataToSend[6] | 1 << 6;
     }
+    else {
+
+    }
     if(right > 0){
     DataToSend[6] =  DataToSend[6] | 1 << 4;
     }
+    else {
+
+    }
+
     short crc = Crc16((unsigned char *)DataToSend.data(), 7);
     std::cout << std::hex << "crc" << crc << std::endl;
     DataToSend[7] = crc;

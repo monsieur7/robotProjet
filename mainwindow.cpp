@@ -7,6 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     QObject::connect(ui->Top, &QPushButton::clicked, this, &MainWindow::on_Top_clicked);
+   //QObject::connect(ui->, &QPushButton::clicked, this, &MainWindow::on_bottom_clicked);
+
     login = new Login(nullptr, &robot);
 }
 MainWindow::~MainWindow()
@@ -27,4 +29,12 @@ void MainWindow::on_Top_clicked()
     std::cout << "going top " << std::endl;
 
     robot.sendMovement(120, 120);
+}
+
+
+void MainWindow::on_bottom_clicked()
+{
+    std::cout << "going bottom " << std::endl;
+
+    robot.sendMovement(-120, -120);
 }

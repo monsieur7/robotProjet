@@ -19,11 +19,11 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_clicked();
-
     void on_actionSe_connecter_triggered();
 
     void on_Top_clicked();
+
+    void on_bottom_clicked();
 
 private:
     Ui::MainWindow *ui;
