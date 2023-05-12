@@ -103,7 +103,7 @@ void MainWindow::on_right_pressed()
 
 void MainWindow::on_right_released()
 {
-    std::cout << "stop going top " << std::endl;
+    std::cout << "stop going right " << std::endl;
 
     robot.sendMovement(0,0);
 }
