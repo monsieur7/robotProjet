@@ -21,9 +21,8 @@ public:
 private slots:
     void on_actionSe_connecter_triggered();
 
-    void on_Top_clicked();
+    void updateUI();
 
-    void on_bottom_clicked();
 
 private:
     Ui::MainWindow *ui;

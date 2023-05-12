@@ -69,6 +69,7 @@
      <string>File</string>
     </property>
     <addaction name="actionSe_connecter"/>
+    <addaction name="actionSe_d_connecter"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -84,6 +85,11 @@
   <action name="actionSe_connecter">
    <property name="text">
     <string>Se connecter</string>
+   </property>
+  </action>
+  <action name="actionSe_d_connecter">
+   <property name="text">
+    <string>Se déconnecter</string>
    </property>
   </action>
  </widget>

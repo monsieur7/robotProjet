@@ -34,7 +34,7 @@ private:
     QTimer *TimerEnvoi;
     QString _ip;
     QString _port;
-    short Crc16(unsigned char *Adresse_tab , unsigned char Taille_max);
+    int Crc16(unsigned char *Adresse_tab , unsigned char Taille_max);
 };
 
 #endif // MYROBOT_H

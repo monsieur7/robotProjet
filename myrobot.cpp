@@ -54,18 +54,18 @@ void MyRobot::disconnected() {
 }
 
 void MyRobot::bytesWritten(qint64 bytes) {
-    qDebug() << bytes << " bytes written...";
+    //qDebug() << bytes << " bytes written...";
 }
 
 void MyRobot::readyRead() {
-    qDebug() << "reading..."; // read the data from the socket
+    //qDebug() << "reading..."; // read the data from the socket
     DataReceived = socket->readAll();
     emit updateUI(DataReceived);
     qDebug() << DataReceived[0] << DataReceived[1] << DataReceived[2];
 }
 
 void MyRobot::MyTimerSlot() {
-    qDebug() << "Timer...";
+   // qDebug() << "Timer...";
     while(Mutex.tryLock());
     socket->write(DataToSend);
     Mutex.unlock();
@@ -79,7 +79,7 @@ void MyRobot::setIpAddress(QString ip){
     _ip = ip;
 }
 
-short MyRobot::Crc16(unsigned char *Adresse_tab , unsigned char Taille_max) {
+int MyRobot::Crc16(unsigned char *Adresse_tab , unsigned char Taille_max) {
     unsigned int Crc = 0xFFFF;
     unsigned int Polynome = 0xA001;
     unsigned int CptOctet = 0;
@@ -88,7 +88,7 @@ short MyRobot::Crc16(unsigned char *Adresse_tab , unsigned char Taille_max) {
 
  Crc = 0xFFFF;
  Polynome = 0xA001;
- for ( CptOctet= 0 ; CptOctet < Taille_max ; CptOctet++)  {
+ for ( CptOctet= 1 ; CptOctet < Taille_max ; CptOctet++)  {
      Crc ^= *( Adresse_tab + CptOctet);
 
         for ( CptBit = 0; CptBit <= 7 ; CptBit++)   {
@@ -102,9 +102,9 @@ short MyRobot::Crc16(unsigned char *Adresse_tab , unsigned char Taille_max) {
 }
 
 void MyRobot::sendMovement(int left, int right){
-    DataToSend[2] = left % 241;
+    DataToSend[2] = (char)((abs(left)) % 241);
     DataToSend[3] = 0x0;
-    DataToSend[4] = right % 241;
+    DataToSend[4] = (char)((abs(right)) % 241);
     DataToSend[5] = 0x0;
     if(left > 0){
     DataToSend[6] = DataToSend[6] | 1 << 6;
@@ -116,11 +116,11 @@ void MyRobot::sendMovement(int left, int right){
     DataToSend[6] =  DataToSend[6] | 1 << 4;
     }
     else {
+        // do nothing because by defualt its reverse
 
     }
-
-    short crc = Crc16((unsigned char *)DataToSend.data(), 7);
+    int crc = Crc16((unsigned char *)DataToSend.data(), 7);
     std::cout << std::hex << "crc" << crc << std::endl;
     DataToSend[7] = crc;
-    DataToSend[8] = (crc >> 8);
+    DataToSend[8] = crc >> 8;
 }
