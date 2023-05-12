@@ -51,6 +51,6 @@ void MainWindow::on_right_clicked()
 {
     std::cout << "going bottom " << std::endl;
 
-    robot.sendMovement(20,20);
+    robot.sendMovement(-80,-80);
 }
 
