@@ -20,7 +20,7 @@
       <x>1120</x>
       <y>150</y>
       <width>231</width>
-      <height>141</height>
+      <height>143</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -29,12 +29,18 @@
        <property name="text">
         <string>Left</string>
        </property>
+       <property name="shortcut">
+        <string>Q</string>
+       </property>
       </widget>
      </item>
      <item row="0" column="0">
       <widget class="QPushButton" name="Top">
        <property name="text">
         <string>Top</string>
+       </property>
+       <property name="shortcut">
+        <string>Z</string>
        </property>
       </widget>
      </item>
@@ -43,6 +49,9 @@
        <property name="text">
         <string>Bottom</string>
        </property>
+       <property name="shortcut">
+        <string>S</string>
+       </property>
       </widget>
      </item>
      <item row="3" column="0">
@@ -50,9 +59,22 @@
        <property name="text">
         <string>Right</string>
        </property>
+       <property name="shortcut">
+        <string>D</string>
+       </property>
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QTextEdit" name="textEdit">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>290</y>
+      <width>104</width>
+      <height>75</height>
+     </rect>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -61,7 +83,7 @@
      <x>0</x>
      <y>0</y>
      <width>1453</width>
-     <height>21</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
