@@ -7,6 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
    QObject::connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI);
+    _player = new QMediaPlayer(parent);
+    _player->setMedia(QUrl("http://http://192.168.1.106:8080/?action=stream"));
 
 
     login = new Login(nullptr, &robot);

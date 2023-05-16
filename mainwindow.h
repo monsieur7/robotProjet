@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMediaPlayer>
+
 #include <iostream>
 #include "login.h"
 #include "myrobot.h"
@@ -47,6 +49,7 @@ private:
     Ui::MainWindow *ui;
     Login *login;
     MyRobot robot;
+    QMediaPlayer * _player;
 };
 
 #endif // MAINWINDOW_H
