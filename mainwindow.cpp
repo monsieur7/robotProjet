@@ -7,9 +7,15 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
    QObject::connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI);
-    _player = new QMediaPlayer(parent);
-    _player->setMedia(QUrl("http://http://192.168.1.106:8080/?action=stream"));
 
+
+   networkManager = new QNetworkAccessManager(this);
+
+   QNetworkRequest request;
+   request.setUrl(QUrl("http://192.168.1.106:8080/?action=stream"));
+   reply = networkManager->get(request);
+
+   connect(reply, &QNetworkReply::readyRead, this, &MainWindow::networkReplyReadyRead);
 
     login = new Login(nullptr, &robot);
 }
@@ -134,13 +140,65 @@ void MainWindow::on_right_pressed()
     robot.sendMovement(80,0);
 }
 
-
-
-
 void MainWindow::on_right_released()
 {
     std::cout << "stop going right " << std::endl;
 
     robot.sendMovement(0,0);
+}
+#include <QImageReader>
+
+// ...
+
+#include <QImageReader>
+
+// ...
+
+void MainWindow::networkReplyReadyRead()
+{
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+    if (reply && reply->error() == QNetworkReply::NoError)
+    {
+        // Append the received data to a buffer
+        imageDataBuffer.append(reply->readAll());
+
+        // Check if the full image frame was received
+            int markerIndex = imageDataBuffer.indexOf(QByteArray::fromHex("FFD9"));
+            if (markerIndex != -1)
+            {
+                // Extract the image frame data including the marker
+                QByteArray imageFrameData = imageDataBuffer.left(markerIndex + 2);
+
+                // Load the image data into a QImage
+                QImageReader imageReader;
+                imageReader.setDecideFormatFromContent(false);  // Disable format auto-detection
+                imageReader.setFormat("JPEG");
+                imageReader.setDevice(new QBuffer(&imageFrameData));  // Set the buffer containing image data
+                QImage image = imageReader.read();
+                std::cout << "reading image" << std::endl;
+                if (!image.isNull())
+                {
+                    // Create a QPixmap from the loaded QImage
+                    QPixmap pixmap = QPixmap::fromImage(image);
+                    std::cout << "drawing image" << std::endl;
+
+
+                    // Perform scaling operation on the pixmap
+                    QPixmap scaledPixmap = pixmap.scaled(200, 4/3);
+
+                    // Set the pixmap to your QLabel widget
+                    ui->label_2->setPixmap(scaledPixmap);
+                    ui->label_2->update();
+                    // Remove the processed image frame from the buffer
+                    imageDataBuffer.remove(0, markerIndex + 2);
+                }
+            }
+            else
+            {
+                std::cout << " image null" << std::endl;
+
+                return ;  // No more complete image frames in the buffer
+            }
+    }
 }
 

@@ -3,11 +3,17 @@
 
 #include <QMainWindow>
 #include <QMediaPlayer>
+#include <QMediaContent>
+#include <QtNetwork>
+#include <QLabel>
+#include <QPixmap>
+#include <QByteArray>
+
 
 #include <iostream>
 #include "login.h"
 #include "myrobot.h"
-
+#include <QVideoWidget>
 namespace Ui {
 class MainWindow;
 }
@@ -44,12 +50,15 @@ private slots:
     void on_right_pressed();
 
     void on_right_released();
+    void networkReplyReadyRead();
 
 private:
     Ui::MainWindow *ui;
     Login *login;
     MyRobot robot;
-    QMediaPlayer * _player;
+    QNetworkAccessManager * networkManager;
+    QNetworkReply * reply;
+    QByteArray imageDataBuffer;
 };
 
 #endif // MAINWINDOW_H
