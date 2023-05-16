@@ -24,10 +24,9 @@ private slots:
     void updateUI();
 
 
-    void on_left_clicked();
 
-    void on_right_clicked();
 
+    void on_actionSe_d_connecter_triggered();
     void on_Top_pressed();
 
     void on_Top_released();

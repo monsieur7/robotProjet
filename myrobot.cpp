@@ -102,21 +102,21 @@ int MyRobot::Crc16(unsigned char *Adresse_tab , unsigned char Taille_max) {
 }
 
 void MyRobot::sendMovement(int left, int right){
-    DataToSend[2] = (char)((abs(left)) % 241);
+    DataToSend[2] = abs(left) % 241;
     DataToSend[3] = 0x0;
-    DataToSend[4] = (char)((abs(right)) % 241);
+    DataToSend[4] = abs(right) % 241;
     DataToSend[5] = 0x0;
     if(left > 0){
     DataToSend[6] = DataToSend[6] | 1 << 6;
     }
     else {
-
+        DataToSend[6] =DataToSend[6] & ~( 1 << 6);
     }
     if(right > 0){
     DataToSend[6] =  DataToSend[6] | 1 << 4;
     }
     else {
-        // do nothing because by defualt its reverse
+        DataToSend[6] =  DataToSend[6] & ~( 1 << 4);
 
     }
     int crc = Crc16((unsigned char *)DataToSend.data(), 7);
