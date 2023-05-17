@@ -47,12 +47,12 @@ private slots:
     void on_right_pressed();
 
     void on_right_released();
-
 private:
     Ui::MainWindow *ui;
     Login *login;
     MyRobot robot;
     QWebEngineView *webView;
+    void showCamera(QUrl url);
 
 };
 
