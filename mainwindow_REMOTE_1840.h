@@ -2,15 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QtNetwork>
-#include <QLabel>
-#include <QByteArray>
-
-
 #include <iostream>
 #include "login.h"
 #include "myrobot.h"
-#include <QWebEngineView>
+
 namespace Ui {
 class MainWindow;
 }
@@ -29,9 +24,10 @@ private slots:
     void updateUI();
 
 
+    void on_left_clicked();
 
+    void on_right_clicked();
 
-    void on_actionSe_d_connecter_triggered();
     void on_Top_pressed();
 
     void on_Top_released();
@@ -52,8 +48,6 @@ private:
     Ui::MainWindow *ui;
     Login *login;
     MyRobot robot;
-    QWebEngineView *webView;
-
 };
 
 #endif // MAINWINDOW_H
