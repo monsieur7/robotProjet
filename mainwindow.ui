@@ -14,16 +14,26 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="gridLayoutWidget_2">
+   <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>810</x>
-      <y>60</y>
-      <width>591</width>
-      <height>351</height>
+      <x>1120</x>
+      <y>150</y>
+      <width>231</width>
+      <height>143</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout_2">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="2" column="0">
+      <widget class="QPushButton" name="left">
+       <property name="text">
+        <string>Left</string>
+       </property>
+       <property name="shortcut">
+        <string>Q</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="0">
       <widget class="QPushButton" name="Top">
        <property name="text">
@@ -34,7 +44,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="1" column="0">
       <widget class="QPushButton" name="bottom">
        <property name="text">
         <string>Bottom</string>
@@ -44,36 +54,6 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QPushButton" name="left">
-         <property name="text">
-          <string>Left</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="right">
-         <property name="text">
-          <string>Right</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="gridLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>130</x>
-      <y>60</y>
-      <width>591</width>
-      <height>511</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout"/>
      <item row="3" column="0">
       <widget class="QPushButton" name="right">
        <property name="text">
