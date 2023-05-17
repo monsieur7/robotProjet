@@ -47,12 +47,15 @@ private slots:
     void on_right_pressed();
 
     void on_right_released();
+    void on_verticalSlider_sliderMoved(int position);
+
 private:
     Ui::MainWindow *ui;
     Login *login;
     MyRobot robot;
     QWebEngineView *webView;
     void showCamera(QUrl url);
+    int _speed;
 
 };
 

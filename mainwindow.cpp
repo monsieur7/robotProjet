@@ -75,7 +75,7 @@ void MainWindow::on_Top_pressed()
 {
     std::cout << "going top " << std::endl;
 
-    robot.sendMovement(120,120);
+    robot.sendMovement(_speed,_speed);
 }
 
 
@@ -95,7 +95,7 @@ void MainWindow::on_bottom_pressed()
 {
     std::cout << "going bottom " << std::endl;
 
-    robot.sendMovement(-120,-120);
+    robot.sendMovement(-_speed,-_speed);
 
 }
 
@@ -117,7 +117,7 @@ void MainWindow::on_left_pressed()
 {
     std::cout << "going left " << std::endl;
 
-    robot.sendMovement(0,80);
+    robot.sendMovement(0,_speed);
 }
 
 
@@ -132,7 +132,7 @@ void MainWindow::on_right_pressed()
 {
     std::cout << "going right " << std::endl;
 
-    robot.sendMovement(80,0);
+    robot.sendMovement(_speed,0);
 }
 
 void MainWindow::on_right_released()
@@ -150,3 +150,10 @@ void MainWindow::showCamera(QUrl url){
     webView->load(url);
     ui->gridLayout_2->addWidget(webView);
 }
+
+void MainWindow::on_verticalSlider_sliderMoved(int position)
+{
+    this->_speed = position % 128;
+    std::cout << "new speed " << this->_speed << std::endl;
+}
+
