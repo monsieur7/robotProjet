@@ -1,21 +1,16 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-//QMediaPlayer
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-
-
-
     ui->setupUi(this);
+   QObject::connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI);
+    //QObject::connect(ui->Top, &QPushButton::clicked, this, &MainWindow::on_Top_clicked);
+   //QObject::connect(ui->, &QPushButton::clicked, this, &MainWindow::on_bottom_clicked);
+   //QObject::connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI);
 
-    webView = new QWebEngineView();
-
-    // Load a webpage
-    webView->load(QUrl("http://192.168.1.106:8080/?action=stream"));
-    ui->gridLayout->addWidget(webView);
     login = new Login(nullptr, &robot);
 }
 MainWindow::~MainWindow()
@@ -68,12 +63,10 @@ void MainWindow::updateUI(){
 
 
 
-
 void MainWindow::on_actionSe_d_connecter_triggered()
 {
     robot.disConnect();
 }
-
 void MainWindow::on_Top_pressed()
 {
     std::cout << "going top " << std::endl;
@@ -120,7 +113,7 @@ void MainWindow::on_left_pressed()
 {
     std::cout << "going left " << std::endl;
 
-    robot.sendMovement(0,80);
+    robot.sendMovement(80,80);
 }
 
 
@@ -136,12 +129,15 @@ void MainWindow::on_right_pressed()
 {
     std::cout << "going right " << std::endl;
 
-    robot.sendMovement(80,0);
+    robot.sendMovement(-80,-80);
 }
+
+
+
 
 void MainWindow::on_right_released()
 {
-    std::cout << "stop going right " << std::endl;
+    std::cout << "stop going top " << std::endl;
 
     robot.sendMovement(0,0);
 }

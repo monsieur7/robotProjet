@@ -61,18 +61,16 @@
      </item>
     </layout>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>130</x>
       <y>60</y>
-      <width>521</width>
-      <height>351</height>
+      <width>591</width>
+      <height>511</height>
      </rect>
     </property>
-    <property name="text">
-     <string/>
-    </property>
+    <layout class="QGridLayout" name="gridLayout"/>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
