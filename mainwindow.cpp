@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Load a webpage
     webView->load(QUrl("http://192.168.1.106:8080/?action=stream"));
-    ui->gridLayout->addWidget(webView);
+    ui->gridLayout_2->addWidget(webView);
     login = new Login(nullptr, &robot);
 }
 MainWindow::~MainWindow()
