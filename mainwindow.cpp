@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _odometryL = 0;
     _odometryR = 0;
     _oldTime = 0;
+    ui->batterie->setValue(0); // init batterie level;
 }
 MainWindow::~MainWindow()
 {
@@ -72,11 +73,12 @@ void MainWindow::updateUI(){
     qDebug() << "speed " << currentSpeedR << " " << currentSpeedL << "\n";
     ui->gauche_lcd->display(currentSpeedL); // displaying left speed
     ui->droite_lcd->display(currentSpeedR); // displaying right speed
+    ui->batterie->setValue(map(BatLevelL, 0, 255, 0, 100)); // set batterie level
 
 }
 
 
-long MainWindow::map(long x, long in_min, long in_max, long out_min, long out_max) {
+long MainWindow::map(long x, long in_min, long in_max, long out_min, long out_max) { // from arduino
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
@@ -131,7 +133,7 @@ void MainWindow::on_left_pressed()
 {
     std::cout << "going left " << std::endl;
 
-    robot.sendMovement(0,_speed);
+    robot.sendMovement(_speed,0);
 }
 
 
@@ -146,7 +148,7 @@ void MainWindow::on_right_pressed()
 {
     std::cout << "going right " << std::endl;
 
-    robot.sendMovement(_speed,0);
+    robot.sendMovement(0,_speed);
 }
 
 void MainWindow::on_right_released()
