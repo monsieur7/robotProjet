@@ -89,8 +89,8 @@
    <widget class="QWidget" name="gridLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>90</y>
+      <x>180</x>
+      <y>70</y>
       <width>461</width>
       <height>281</height>
      </rect>
@@ -231,21 +231,27 @@
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>400</y>
+      <y>380</y>
       <width>160</width>
-      <height>80</height>
+      <height>99</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_3">
-     <item row="0" column="1">
-      <widget class="Line" name="line_2">
+     <item row="0" column="0">
+      <widget class="QProgressBar" name="HAUT_DROITE">
+       <property name="value">
+        <number>24</number>
+       </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="Line" name="line">
+     <item row="0" column="1">
+      <widget class="QProgressBar" name="HAUT_GAUCHE">
+       <property name="value">
+        <number>24</number>
+       </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
@@ -259,19 +265,25 @@
       <x>190</x>
       <y>500</y>
       <width>160</width>
-      <height>80</height>
+      <height>111</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_4">
      <item row="0" column="0">
-      <widget class="Line" name="line_3">
+      <widget class="QProgressBar" name="BAS_GAUCHE">
+       <property name="value">
+        <number>24</number>
+       </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="Line" name="line_4">
+      <widget class="QProgressBar" name="BAS_DROIT">
+       <property name="value">
+        <number>24</number>
+       </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
@@ -309,7 +321,7 @@
     <property name="geometry">
      <rect>
       <x>240</x>
-      <y>380</y>
+      <y>360</y>
       <width>67</width>
       <height>17</height>
      </rect>
@@ -321,8 +333,8 @@
    <widget class="QLabel" name="label_9">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>580</y>
+      <x>240</x>
+      <y>620</y>
       <width>67</width>
       <height>17</height>
      </rect>

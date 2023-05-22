@@ -75,6 +75,24 @@ void MainWindow::updateUI(){
     ui->droite_lcd->display(currentSpeedR); // displaying right speed
     ui->batterie->setValue(map(BatLevelL, 0, 255, 0, 100)); // set batterie level
 
+
+
+    //SETTING IR :
+
+    //AVANT
+    ui->HAUT_DROITE->setValue(map(IR1, 0, 255, 0, 100)); // set batterie level
+    ui->HAUT_GAUCHE->setValue(map(IL, 0, 255, 0, 100)); // set batterie level
+
+
+
+    //ARRIERE
+
+    ui->BAS_DROIT->setValue(map(IR2, 0, 255, 0, 100)); // set batterie level
+    ui->BAS_GAUCHE->setValue(map(IL2, 0, 255, 0, 100)); // set batterie level
+
+
+
+
 }
 
 
