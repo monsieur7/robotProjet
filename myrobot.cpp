@@ -36,7 +36,6 @@ bool MyRobot::doConnect() {
     }
     TimerEnvoi->start(75);
     return true;
-
 }
 
 bool MyRobot::disConnect() {
@@ -58,7 +57,7 @@ void MyRobot::bytesWritten(qint64 bytes) {
 }
 
 void MyRobot::readyRead() {
-    //qDebug() << "reading..."; // read the data from the socket
+    qDebug() << "reading..."; // read the data from the socket
     DataReceived = socket->readAll();
     emit updateUI(DataReceived);
     qDebug() << DataReceived[0] << DataReceived[1] << DataReceived[2];

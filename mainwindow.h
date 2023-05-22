@@ -5,6 +5,7 @@
 #include <QtNetwork>
 #include <QLabel>
 #include <QByteArray>
+#include <QDebug>
 
 
 #include <iostream>
@@ -56,6 +57,8 @@ private:
     QWebEngineView *webView;
     void showCamera(QUrl url);
     int _speed;
+    long map(long x, long in_min, long in_max, long out_min, long out_max);
+
 
 };
 

@@ -10,8 +10,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     ui->setupUi(this);
-    this->showCamera(QUrl("https://mjpeg.sanford.io/count.mjpeg"));
+    this->showCamera(QUrl("http://192.168.1.106:8080/?action=stream"));
     login = new Login(nullptr, &robot);
+    connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI);
 }
 MainWindow::~MainWindow()
 {
@@ -30,8 +31,8 @@ void MainWindow::on_actionSe_connecter_triggered()
 void MainWindow::updateUI(){
   //  robot.DataReceived;
 
-     int speedR, speedL, odometryL, odometryR, BatLevelR, IR1, IR2, CurrentL, CurrentR, VersionR, VersionL, dataL, dataR, IL, IL2;
-    unsigned int BatLevelL;
+    int speedR, speedL, odometryL, odometryR, BatLevelR,CurrentL, CurrentR, VersionR, VersionL, dataL, dataR;
+    uint8_t BatLevelL, IR1, IR2,IL, IL2;;
 
 
 
@@ -58,13 +59,13 @@ void MainWindow::updateUI(){
 
     VersionL=robot.DataReceived.data()[18];
     VersionR=robot.DataReceived.data()[18];
-    std::cout << "speedR: " << speedR << " \n speedL: " << speedL << " \n odometryL: " << odometryL << " \n odometryR: " << odometryR << "\n BatLevelL:  " << BatLevelL << " \n BatLevelR: " << BatLevelR
-    << " \n IR1: " << IR1 << " \n IR2: " << IR2 << " \n CurrentL:" << CurrentL << " \n CurrentR: " << CurrentR << "\nVersionR: " << VersionR << "\nVersionL: " << VersionL << "\ndataL: "
-              << "\nIL: " << IL << "\nIL2: " << IL2;
+    qDebug() << "data received " << BatLevelL << " " << IR1 << " "<<  IR2 <<" " << IL << " " << IL2<< "\n";
 }
 
 
-
+long MainWindow::map(long x, long in_min, long in_max, long out_min, long out_max) {
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
 
 void MainWindow::on_actionSe_d_connecter_triggered()
 {
