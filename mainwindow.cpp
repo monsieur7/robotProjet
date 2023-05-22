@@ -79,6 +79,8 @@ void MainWindow::updateUI(){
     ui->gauche_lcd->display(currentSpeedL); // displaying left speed
     ui->droite_lcd->display(currentSpeedR); // displaying right speed
     ui->batterie->setValue(map(BatLevelL, 0, 255, 0, 100)); // set batterie level
+    //_speedWheelL = speedR; // A TESTER
+    // _speedWheelR = speedL;
 
 
 
