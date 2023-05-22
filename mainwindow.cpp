@@ -19,6 +19,11 @@ MainWindow::MainWindow(QWidget *parent) :
     _odometryR = 0;
     _oldTime = 0;
     ui->batterie->setValue(0); // init batterie level;
+    ui->BAS_DROIT->setValue(0); // init IR progress bar
+    ui->BAS_GAUCHE->setValue(0);
+    ui->HAUT_DROITE->setValue(0);
+    ui->HAUT_GAUCHE->setValue(0);
+
 }
 MainWindow::~MainWindow()
 {
