@@ -13,6 +13,11 @@ MainWindow::MainWindow(QWidget *parent) :
     this->showCamera(QUrl("http://192.168.1.106:8080/?action=stream"));
     login = new Login(nullptr, &robot);
     connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI);
+    _speedWheelL = 0;
+    _speedWheelR = 0;
+    _odometryL = 0;
+    _odometryR = 0;
+    _oldTime = 0;
 }
 MainWindow::~MainWindow()
 {
@@ -59,7 +64,12 @@ void MainWindow::updateUI(){
 
     VersionL=robot.DataReceived.data()[18];
     VersionR=robot.DataReceived.data()[18];
+    int dt = QDateTime::currentDateTime().toSecsSinceEpoch() - _oldTime;
+
+    float currentSpeedR = speedR - _speedWheelR / dt / 0.01; // ticks per 10ms
+    float currentSpeedL = speedL - _speedWheelL / dt / 0.01;
     qDebug() << "data received " << BatLevelL << " " << IR1 << " "<<  IR2 <<" " << IL << " " << IL2<< "\n";
+    qDebug() << "speed " << currentSpeedR << " " << currentSpeedL << "\n";
 }
 
 

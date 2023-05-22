@@ -6,7 +6,7 @@
 #include <QLabel>
 #include <QByteArray>
 #include <QDebug>
-
+#include <QDateTime>
 
 #include <iostream>
 #include "login.h"
@@ -58,6 +58,11 @@ private:
     void showCamera(QUrl url);
     int _speed;
     long map(long x, long in_min, long in_max, long out_min, long out_max);
+    int _speedWheelR;
+    int _speedWheelL;
+    int _odometryR;
+    int _odometryL;
+    long _oldTime;
 
 
 };
