@@ -7,7 +7,7 @@
 #include <QByteArray>
 #include <QDebug>
 #include <QDateTime>
-
+#include <QLCDNumber>
 #include <iostream>
 #include "login.h"
 #include "myrobot.h"

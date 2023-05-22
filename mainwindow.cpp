@@ -70,6 +70,9 @@ void MainWindow::updateUI(){
     float currentSpeedL = speedL - _speedWheelL / dt / 0.01;
     qDebug() << "data received " << BatLevelL << " " << IR1 << " "<<  IR2 <<" " << IL << " " << IL2<< "\n";
     qDebug() << "speed " << currentSpeedR << " " << currentSpeedL << "\n";
+    ui->gauche_lcd->display(currentSpeedL); // displaying left speed
+    ui->droite_lcd->display(currentSpeedR); // displaying right speed
+
 }
 
 
