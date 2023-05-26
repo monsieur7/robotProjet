@@ -29,12 +29,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        cameramove.cpp \
         login.cpp \
         main.cpp \
         mainwindow.cpp \
         myrobot.cpp
 
 HEADERS += \
+        cameramove.h \
         login.h \
         mainwindow.h \
         myrobot.h
