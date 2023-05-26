@@ -72,17 +72,19 @@ void MainWindow::updateUI(){
     VersionL=robot.DataReceived.data()[18];
     VersionR=robot.DataReceived.data()[18];
     int dt = QDateTime::currentDateTime().toSecsSinceEpoch() - _oldTime;
-
-    float currentSpeedR = speedR - _speedWheelR / dt / 0.01; // ticks per 10ms
-    float currentSpeedL = speedL - _speedWheelL / dt / 0.01; //
+    // DIAMETRE ROUE : 12.5cm
+    // circonférence roues : 0.39m
+    float currentSpeedR =(( odometryR - _speedWheelR / 2248 ) * 0.39)/dt;// 2448 ticks per wheel turn
+    float currentSpeedL =(( odometryL - _speedWheelL /2448) *0.39)/dt ; // same
+    // speed = d / t => d = number of wheel turn * pi * wheel diameter
     qDebug() << "data received " << BatLevelL << " " << IR1 << " "<<  IR2 <<" " << IL << " " << IL2<< "\n";
     qDebug() << "speed " << currentSpeedR << " " << currentSpeedL << "\n";
     ui->gauche_lcd->display(currentSpeedL); // displaying left speed
     ui->droite_lcd->display(currentSpeedR); // displaying right speed
     ui->batterie->setValue(map(BatLevelL, 0, 255, 0, 100)); // set batterie level
 
-    _speedWheelL = speedR; // A TESTER
-     _speedWheelR = speedL;
+    _speedWheelL = odometryL; // A TESTER
+     _speedWheelR = odometryR;
 
 
 
