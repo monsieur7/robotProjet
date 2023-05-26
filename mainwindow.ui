@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(170, 170, 255);</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
@@ -26,6 +29,18 @@
     <layout class="QGridLayout" name="gridLayout">
      <item row="1" column="0">
       <widget class="QPushButton" name="Top">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: red;
+    border-style: outset;
+    border-width: 2px;
+    border-color: black;
+}
+
+QPushButton:pressed {
+    background-color: green; 
+}</string>
+       </property>
        <property name="text">
         <string>Top</string>
        </property>
@@ -51,6 +66,18 @@
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QPushButton" name="left">
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    background-color: red;
+    border-style: outset;
+    border-width: 2px;
+    border-color: black;
+}
+
+QPushButton:pressed {
+    background-color: green; 
+}</string>
+         </property>
          <property name="text">
           <string>Left</string>
          </property>
@@ -61,6 +88,18 @@
        </item>
        <item>
         <widget class="QPushButton" name="right">
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    background-color: red;
+    border-style: outset;
+    border-width: 2px;
+    border-color: black;
+}
+
+QPushButton:pressed {
+    background-color: green; 
+}</string>
+         </property>
          <property name="text">
           <string>Right</string>
          </property>
@@ -105,6 +144,18 @@
       <width>459</width>
       <height>24</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: red;
+    border-style: outset;
+    border-width: 2px;
+    border-color: black;
+}
+
+QPushButton:pressed {
+    background-color: green; 
+}</string>
     </property>
     <property name="text">
      <string>Bottom</string>
@@ -233,7 +284,7 @@
       <x>190</x>
       <y>380</y>
       <width>160</width>
-      <height>99</height>
+      <height>108</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_3">
@@ -402,7 +453,7 @@
      <x>0</x>
      <y>0</y>
      <width>1453</width>
-     <height>22</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

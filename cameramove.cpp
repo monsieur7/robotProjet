@@ -4,21 +4,21 @@ cameraMove::cameraMove()
     _networkManager = new QNetworkAccessManager();
 
 }
-int cameraMove::moveCameraDown(){
+void cameraMove::moveCameraDown(){
     _networkManager->get(QNetworkRequest((QUrl("http://192.168.1.106:8080/?action=command&dest=0&plugin=0&id=10094853&group=1&value=200"))));
 
 }
 //TODO : replay finished
-int cameraMove::moveCameraUp(){
+void cameraMove::moveCameraUp(){
     _networkManager->get(QNetworkRequest((QUrl("http://192.168.1.106:8080/?action=command&dest=0&plugin=0&id=10094853&group=1&value=-200"))));
 
 }
 
-int cameraMove::moveCameraLeft(){
+void cameraMove::moveCameraLeft(){
     _networkManager->get(QNetworkRequest((QUrl("http://192.168.1.106:8080/?action=command&dest=0&plugin=0&id=10094852&group=1&value=200"))));
 
 }
-int cameraMove::moveCameraRight(){
+void cameraMove::moveCameraRight(){
     _networkManager->get(QNetworkRequest((QUrl("http://192.168.1.106:8080/?action=command&dest=0&plugin=0&id=10094852&group=1&value=-200"))));
 
 }

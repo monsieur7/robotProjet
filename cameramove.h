@@ -7,10 +7,10 @@ class cameraMove
 {
 public:
     cameraMove();
-    int moveCameraLeft();
-    int moveCameraRight();
-    int moveCameraUp();
-    int moveCameraDown();
+    void moveCameraLeft();
+    void moveCameraRight();
+    void moveCameraUp();
+    void moveCameraDown();
 private:
     QNetworkAccessManager * _networkManager;
     bool _finishedConnect = false;
