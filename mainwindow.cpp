@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->HAUT_GAUCHE->setValue(0);
     _cameraMove = new cameraMove(); // init camera movement
 
+
 }
 MainWindow::~MainWindow()
 {
@@ -80,6 +81,7 @@ void MainWindow::updateUI(){
     ui->gauche_lcd->display(currentSpeedL); // displaying left speed
     ui->droite_lcd->display(currentSpeedR); // displaying right speed
     ui->batterie->setValue(map(BatLevelL, 0, 255, 0, 100)); // set batterie level
+    ui->batterie->setProperty("myBatteryProperty", BatLevelR);
 
     _speedWheelL = speedR; // A TESTER
      _speedWheelR = speedL;
@@ -98,6 +100,7 @@ void MainWindow::updateUI(){
 
     ui->BAS_DROIT->setValue(map(IR2, 0, 255, 0, 100)); // set batterie level
     ui->BAS_GAUCHE->setValue(map(IL2, 0, 255, 0, 100)); // set batterie level
+
 
 
 

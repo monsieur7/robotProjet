@@ -14,7 +14,8 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(170, 170, 255);</string>
+   <string notr="true">background-color: rgb(170, 170, 255);
+</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="gridLayoutWidget">
@@ -254,6 +255,17 @@ QPushButton:pressed {
       <width>118</width>
       <height>23</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    /* Définir une couleur de base */
+    color: green;
+}
+
+QLabel[myBatteryProperty&gt;=&quot;20&quot;] {
+    /* Définir la couleur lorsque myVariable vaut 1 */
+    color: red;
+}</string>
     </property>
     <property name="value">
      <number>24</number>
