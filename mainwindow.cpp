@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->BAS_GAUCHE->setValue(0);
     ui->HAUT_DROITE->setValue(0);
     ui->HAUT_GAUCHE->setValue(0);
+    _cameraMove = new cameraMove(); // init camera movement
 
 }
 MainWindow::~MainWindow()
@@ -41,7 +42,7 @@ void MainWindow::on_actionSe_connecter_triggered()
 
 void MainWindow::updateUI(){
   //  robot.DataReceived;
-
+// code taken from docs
     int speedR, speedL, odometryL, odometryR, BatLevelR,CurrentL, CurrentR, VersionR, VersionL, dataL, dataR;
     uint8_t BatLevelL, IR1, IR2,IL, IL2;;
 
@@ -73,12 +74,13 @@ void MainWindow::updateUI(){
     int dt = QDateTime::currentDateTime().toSecsSinceEpoch() - _oldTime;
 
     float currentSpeedR = speedR - _speedWheelR / dt / 0.01; // ticks per 10ms
-    float currentSpeedL = speedL - _speedWheelL / dt / 0.01;
+    float currentSpeedL = speedL - _speedWheelL / dt / 0.01; //
     qDebug() << "data received " << BatLevelL << " " << IR1 << " "<<  IR2 <<" " << IL << " " << IL2<< "\n";
     qDebug() << "speed " << currentSpeedR << " " << currentSpeedL << "\n";
     ui->gauche_lcd->display(currentSpeedL); // displaying left speed
     ui->droite_lcd->display(currentSpeedR); // displaying right speed
     ui->batterie->setValue(map(BatLevelL, 0, 255, 0, 100)); // set batterie level
+
     //_speedWheelL = speedR; // A TESTER
     // _speedWheelR = speedL;
 
@@ -196,5 +198,28 @@ void MainWindow::on_verticalSlider_sliderMoved(int position)
 {
     this->_speed = position % 128;
     std::cout << "new speed " << this->_speed << std::endl;
+}
+
+void MainWindow::on_CAMERA_UP_clicked()
+{
+    _cameraMove->moveCameraUp();
+}
+
+
+void MainWindow::on_CAMERA_LEFT_clicked()
+{
+    _cameraMove->moveCameraLeft();
+}
+
+
+void MainWindow::on_CAMERA_RIGHT_clicked()
+{
+    _cameraMove->moveCameraRight();
+}
+
+
+void MainWindow::on_CAMERA_DOWN_clicked()
+{
+    _cameraMove->moveCameraDown();
 }
 
