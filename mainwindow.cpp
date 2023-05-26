@@ -81,8 +81,8 @@ void MainWindow::updateUI(){
     ui->droite_lcd->display(currentSpeedR); // displaying right speed
     ui->batterie->setValue(map(BatLevelL, 0, 255, 0, 100)); // set batterie level
 
-    //_speedWheelL = speedR; // A TESTER
-    // _speedWheelR = speedL;
+    _speedWheelL = speedR; // A TESTER
+     _speedWheelR = speedL;
 
 
 
@@ -200,26 +200,31 @@ void MainWindow::on_verticalSlider_sliderMoved(int position)
     std::cout << "new speed " << this->_speed << std::endl;
 }
 
-void MainWindow::on_CAMERA_UP_clicked()
-{
-    _cameraMove->moveCameraUp();
-}
 
-
-void MainWindow::on_CAMERA_LEFT_clicked()
-{
-    _cameraMove->moveCameraLeft();
-}
-
-
-void MainWindow::on_CAMERA_RIGHT_clicked()
-{
-    _cameraMove->moveCameraRight();
-}
-
-
-void MainWindow::on_CAMERA_DOWN_clicked()
+void MainWindow::on_CAMERA_DOWN_pressed()
 {
     _cameraMove->moveCameraDown();
+
+}
+
+
+void MainWindow::on_CAMERA_RIGHT_pressed()
+{
+    _cameraMove->moveCameraRight();
+
+}
+
+
+void MainWindow::on_CAMERA_LEFT_pressed()
+{
+    _cameraMove->moveCameraLeft();
+
+}
+
+
+void MainWindow::on_CAMERA_UP_pressed()
+{
+    _cameraMove->moveCameraUp();
+
 }
 

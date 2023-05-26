@@ -51,13 +51,13 @@ private slots:
     void on_right_released();
     void on_verticalSlider_sliderMoved(int position);
 
-    void on_CAMERA_UP_clicked();
+    void on_CAMERA_DOWN_pressed();
 
-    void on_CAMERA_LEFT_clicked();
+    void on_CAMERA_RIGHT_pressed();
 
-    void on_CAMERA_RIGHT_clicked();
+    void on_CAMERA_LEFT_pressed();
 
-    void on_CAMERA_DOWN_clicked();
+    void on_CAMERA_UP_pressed();
 
 private:
     Ui::MainWindow *ui;
