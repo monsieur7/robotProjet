@@ -257,13 +257,11 @@ QPushButton:pressed {
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">QLabel {
-    /* Définir une couleur de base */
+     <string notr="true">QLabel[myBatteryProperty &gt; &quot;20&quot;] {
     color: green;
 }
 
-QLabel[myBatteryProperty&gt;=&quot;20&quot;] {
-    /* Définir la couleur lorsque myVariable vaut 1 */
+QLabel[myBatteryProperty] {
     color: red;
 }</string>
     </property>
