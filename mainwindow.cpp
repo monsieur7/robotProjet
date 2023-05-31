@@ -47,7 +47,7 @@ void MainWindow::updateUI(){
   //  robot.DataReceived;
 // code taken from docs
     int speedR, speedL, odometryL, odometryR, BatLevelR,CurrentL, CurrentR, VersionR, VersionL, dataL, dataR;
-    uint8_t BatLevelL, IR1, IR2,IL, IL2;;
+    uint8_t BatLevelL, IR1, IR2,IL1, IL2;;
 
 
 
@@ -55,7 +55,7 @@ void MainWindow::updateUI(){
     if (speedL > 32767) speedL=speedL-65536;
 
     BatLevelL=robot.DataReceived.data()[2];
-    IL=robot.DataReceived.data()[3];
+    IL1=robot.DataReceived.data()[3];
     IL2=robot.DataReceived.data()[4];
 
     odometryL=((((long)robot.DataReceived.data()[8] << 24))+(((long)robot.DataReceived.data()[7] << 16))+(((long)robot.DataReceived.data()[6] << 8))+((long)robot.DataReceived.data()[5]));
@@ -89,11 +89,12 @@ void MainWindow::updateUI(){
     }
 */
     // speed = d / t => d = number of wheel turn * pi * wheel diameter
-    qDebug() << "data received " << BatLevelL << " " << IR1 << " "<<  IR2 <<" " << IL << " " << IL2<< "\n";
+    qDebug() << "data received " << BatLevelL << " " << IR1 << " "<<  IR2 <<" " << IL1 << " " << IL2<< "\n";
     qDebug() << "speed " << currentSpeedR << " " << currentSpeedL << "\n";
     qDebug() << "odometry L" << (((odometryL - _speedWheelL)/2448.0f)*0.39f)/(float)dt << "odometry R" << (((odometryR - _speedWheelR)/2448.0f)*0.39f)/(float)dt  << "\n";
     qDebug() << "dt " << (float)(dt-_oldTime) << "\n";
-    ui->gauche_lcd->display(movingAverage(currentSpeedL)*1000); // displaying left speed in cm/s
+    //TODO  : moving average !
+    ui->gauche_lcd->display(currentSpeedL*1000); // displaying left speed in cm/s
     ui->droite_lcd->display(currentSpeedR*1000); // displaying right speed in cm/s
     ui->batterie->setValue(map(BatLevelL, 0, 255, 0, 100)); // set batterie level
 
@@ -105,17 +106,69 @@ void MainWindow::updateUI(){
     //SETTING IR :
 
     //AVANT
-    ui->HAUT_DROITE->setValue(map(IL, 0, 255, 0, 100)); // set batterie level
-    ui->HAUT_GAUCHE->setValue(map(IR1, 0, 255, 0, 100)); // set batterie level
+    QPalette palette;
+    //THRESHOLD IS 100
+    // FOR IL2, threshold is 85
+    //setting color to red if value > 100, green else
+    palette = ui->HAUT_DROITE->palette();
+    if(IL1 > 100){
+        IL1 = 100;
+        palette.setColor(QPalette::Highlight, Qt::red); // Qpalette::Highlight is the progress bar color
+    }else {
+        IL1 = 0;
+        palette.setColor(QPalette::Highlight, Qt::green); // Qpalette::Highlight is the progress bar color
+    }
+    ui->HAUT_DROITE->setPalette(palette); // setting palette
+    ui->HAUT_DROITE->show(); // updating color !
+    palette = ui->HAUT_GAUCHE->palette();
+    if(IR1 > 100){
+        IR1 = 100;
+        palette.setColor(QPalette::Highlight, Qt::red); // Qpalette::Highlight is the progress bar color
+
+    }else {
+        IR1 = 0;
+        palette.setColor(QPalette::Highlight, Qt::green); // Qpalette::Highlight is the progress bar color
+
+    }
+    ui->HAUT_GAUCHE->setPalette(palette);
+    ui->HAUT_GAUCHE->show();
+
+    palette = ui->BAS_DROIT->palette();
+    if(IL2 > 90){
+        IL2 = 100;
+        palette.setColor(QPalette::Highlight, Qt::red); // Qpalette::Highlight is the progress bar color
+
+    }else {
+        IL2 = 0;
+        palette.setColor(QPalette::Highlight, Qt::green); // Qpalette::Highlight is the progress bar color
+
+    }
+    ui->BAS_DROIT->setPalette(palette);
+    ui->BAS_DROIT->show();
+
+    palette = ui->BAS_GAUCHE->palette();
+    if(IR2 > 80){
+        IR2 = 100;
+        palette.setColor(QPalette::Highlight, Qt::red); // Qpalette::Highlight is the progress bar color
+
+    }else {
+        IR2 = 0;
+        palette.setColor(QPalette::Highlight, Qt::green); // Qpalette::Highlight is the progress bar color
+
+    }
+    ui->BAS_GAUCHE->setPalette(palette);
+    ui->BAS_GAUCHE->show();
+    // DROITE ET GAUCHE INVERSEE !
+    ui->HAUT_DROITE->setValue(IL1); // set batterie level
+    ui->HAUT_GAUCHE->setValue(IR1); // set batterie level
 
 
 
     //ARRIERE
 
-    ui->BAS_DROIT->setValue(map(IL2, 0, 255, 0, 100)); // set batterie level
-    ui->BAS_GAUCHE->setValue(map(IR2, 0, 255, 0, 100)); // set batterie level
+    ui->BAS_DROIT->setValue(IL2); // set batterie level
+    ui->BAS_GAUCHE->setValue(IR2); // set batterie level
 
-    //value level : 90
 
 
 }
