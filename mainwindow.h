@@ -59,6 +59,8 @@ private slots:
 
     void on_CAMERA_UP_pressed();
 
+    float movingAverage(float value);
+
 private:
     Ui::MainWindow *ui;
     Login *login;
@@ -73,6 +75,7 @@ private:
     int _odometryL;
     long _oldTime;
     cameraMove * _cameraMove;
+    float _movingAverage[10];
 
 };
 
