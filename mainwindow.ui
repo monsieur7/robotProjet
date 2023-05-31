@@ -259,10 +259,12 @@ QPushButton:pressed {
     <property name="styleSheet">
      <string notr="true">QLabel[myBatteryProperty &gt; &quot;20&quot;] {
     color: green;
+	background-color: green;
 }
 
 QLabel[myBatteryProperty] {
     color: red;
+    background-color: green;
 }</string>
     </property>
     <property name="value">
