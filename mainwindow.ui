@@ -505,6 +505,45 @@ QPushButton:pressed {
      <string>LEFT</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="enregistrer">
+    <property name="geometry">
+     <rect>
+      <x>790</x>
+      <y>420</y>
+      <width>89</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>enregisrer</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="executer">
+    <property name="geometry">
+     <rect>
+      <x>910</x>
+      <y>420</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>exécuter</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>860</x>
+      <y>400</y>
+      <width>67</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>séquence</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -512,7 +551,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>1453</width>
-     <height>27</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

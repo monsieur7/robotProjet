@@ -35,10 +35,12 @@ bool MyRobot::doConnect() {
         return false;
     }
     TimerEnvoi->start(75);
+    _connected = true;
     return true;
 }
 
 bool MyRobot::disConnect() {
+    _connected = false;
     TimerEnvoi->stop();
     socket->close();
     return true;
@@ -47,7 +49,9 @@ bool MyRobot::disConnect() {
 void MyRobot::connected() {
     qDebug() << "connected..."; // Hey server, tell me about you.
 }
-
+bool MyRobot::getConnected(){
+    return _connected;
+}
 void MyRobot::disconnected() {
     qDebug() << "disconnected...";
 }
@@ -57,7 +61,7 @@ void MyRobot::bytesWritten(qint64 bytes) {
 }
 
 void MyRobot::readyRead() {
-    qDebug() << "reading..."; // read the data from the socket
+  //  qDebug() << "reading..."; // read the data from the socket
     DataReceived = socket->readAll();
     emit updateUI(DataReceived);
     qDebug() << DataReceived[0] << DataReceived[1] << DataReceived[2];
@@ -122,4 +126,13 @@ void MyRobot::sendMovement(int left, int right){
     std::cout << std::hex << "crc" << crc << std::endl;
     DataToSend[7] = crc;
     DataToSend[8] = crc >> 8;
+}
+
+void MyRobot::sendSequence(std::vector<movement> sequence){
+    for(auto i : sequence){
+        sendMovement(i.speedL, i.speedR);
+        //wait for
+        std::this_thread::sleep_for(std::chrono::seconds(i.time));
+        sendMovement(0,0);
+    }
 }
