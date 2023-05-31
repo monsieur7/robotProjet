@@ -24,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->HAUT_DROITE->setValue(0);
     ui->HAUT_GAUCHE->setValue(0);
     _cameraMove = new cameraMove(); // init camera movement
+    for(int i = 0; i < 10; i++){
+        _movingAverage[i] = 0;
+    }
 
 
 }
@@ -72,36 +75,49 @@ void MainWindow::updateUI(){
 
     VersionL=robot.DataReceived.data()[18];
     VersionR=robot.DataReceived.data()[18];
-    int dt = QDateTime::currentDateTime().toSecsSinceEpoch() - _oldTime;
+    int dt = QDateTime::currentDateTime().toMSecsSinceEpoch();
+    // DIAMETRE ROUE : 12.5cm
+    // circonférence roues : 0.39m
 
-    float currentSpeedR = speedR - _speedWheelR / dt / 0.01; // ticks per 10ms
-    float currentSpeedL = speedL - _speedWheelL / dt / 0.01; //
+    float currentSpeedR =((( odometryR - _speedWheelR )/ 2248.0f ) * 0.39f)/ (float)(dt-_oldTime);// 2448 ticks per wheel turn
+    float currentSpeedL =((( odometryL - _speedWheelL )/2448.0f) *0.39f)/ (float)(dt-_oldTime) ; // same
+
+    /*if(odometryR = _speedWheelR){ // debug
+        currentSpeedR = 0;
+    }
+    if(odometryL = _speedWheelL){
+        currentSpeedL = 0;
+    }
+*/
+    // speed = d / t => d = number of wheel turn * pi * wheel diameter
     qDebug() << "data received " << BatLevelL << " " << IR1 << " "<<  IR2 <<" " << IL << " " << IL2<< "\n";
     qDebug() << "speed " << currentSpeedR << " " << currentSpeedL << "\n";
-    ui->gauche_lcd->display(currentSpeedL); // displaying left speed
-    ui->droite_lcd->display(currentSpeedR); // displaying right speed
+    qDebug() << "odometry L" << (((odometryL - _speedWheelL)/2448.0f)*0.39f)/(float)dt << "odometry R" << (((odometryR - _speedWheelR)/2448.0f)*0.39f)/(float)dt  << "\n";
+    qDebug() << "dt " << (float)(dt-_oldTime) << "\n";
+    ui->gauche_lcd->display(movingAverage(currentSpeedL)*1000); // displaying left speed in cm/s
+    ui->droite_lcd->display(currentSpeedR*1000); // displaying right speed in cm/s
     ui->batterie->setValue(map(BatLevelL, 0, 255, 0, 100)); // set batterie level
     ui->batterie->setProperty("myBatteryProperty", BatLevelR);
 
-    _speedWheelL = speedR; // A TESTER
-     _speedWheelR = speedL;
-
+    _speedWheelL = odometryL; // update old  speed
+     _speedWheelR = odometryR; // update old  speed
+    _oldTime = dt; // update old time
 
 
     //SETTING IR :
 
     //AVANT
-    ui->HAUT_DROITE->setValue(map(IR1, 0, 255, 0, 100)); // set batterie level
-    ui->HAUT_GAUCHE->setValue(map(IL, 0, 255, 0, 100)); // set batterie level
+    ui->HAUT_DROITE->setValue(map(IL, 0, 255, 0, 100)); // set batterie level
+    ui->HAUT_GAUCHE->setValue(map(IR1, 0, 255, 0, 100)); // set batterie level
 
 
 
     //ARRIERE
 
-    ui->BAS_DROIT->setValue(map(IR2, 0, 255, 0, 100)); // set batterie level
-    ui->BAS_GAUCHE->setValue(map(IL2, 0, 255, 0, 100)); // set batterie level
+    ui->BAS_DROIT->setValue(map(IL2, 0, 255, 0, 100)); // set batterie level
+    ui->BAS_GAUCHE->setValue(map(IR2, 0, 255, 0, 100)); // set batterie level
 
-
+    //value level : 90
 
 
 
@@ -229,5 +245,17 @@ void MainWindow::on_CAMERA_UP_pressed()
 {
     _cameraMove->moveCameraUp();
 
+}
+
+float MainWindow::movingAverage(float value){
+    for(int i = 1; i <= 9; i++){
+        _movingAverage[i] = _movingAverage[i-1]; // shift every value by 1 pos
+    }
+    _movingAverage[0] = value; // add new value
+    float sum = 0; // average
+    for(int i = 0; i < 9; i++){
+        sum += _movingAverage[i];
+    }return sum/10;
+//TODO
 }
 
