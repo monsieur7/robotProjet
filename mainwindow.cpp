@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     for(int i = 0; i < 10; i++){
         _movingAverage[i] = 0;
     }
+    _enregistrerState = 0; // state of enregistrer button
 
 
 }
@@ -90,10 +91,11 @@ void MainWindow::updateUI(){
     }
 */
     // speed = d / t => d = number of wheel turn * pi * wheel diameter
-    qDebug() << "data received " << BatLevelL << " " << IR1 << " "<<  IR2 <<" " << IL1 << " " << IL2<< "\n";
+    /*qDebug() << "data received " << BatLevelL << " " << IR1 << " "<<  IR2 <<" " << IL1 << " " << IL2<< "\n";
     qDebug() << "speed " << currentSpeedR << " " << currentSpeedL << "\n";
     qDebug() << "odometry L" << (((odometryL - _speedWheelL)/2448.0f)*0.39f)/(float)dt << "odometry R" << (((odometryR - _speedWheelR)/2448.0f)*0.39f)/(float)dt  << "\n";
     qDebug() << "dt " << (float)(dt-_oldTime) << "\n";
+*/
     //TODO  : moving average !
     ui->gauche_lcd->display(currentSpeedL*1000); // displaying left speed in cm/s
     ui->droite_lcd->display(currentSpeedR*1000); // displaying right speed in cm/s
@@ -183,7 +185,9 @@ long MainWindow::map(long x, long in_min, long in_max, long out_min, long out_ma
 
 void MainWindow::on_actionSe_d_connecter_triggered()
 {
-    robot.disConnect();
+    if(robot.getConnected() == true){
+        robot.disConnect();
+    }
 }
 
 void MainWindow::on_Top_pressed()
@@ -208,9 +212,17 @@ void MainWindow::on_Top_released()
 
 void MainWindow::on_bottom_pressed()
 {
-    std::cout << "going bottom " << std::endl;
 
+
+    std::cout << "going bottom " << std::endl;
+    if(_enregistrerState == 1){
+        _mov = new movement;
+        _mov->speedL = -_speed;
+        _mov->speedR = -_speed;
+    }
+    else {
     robot.sendMovement(-_speed,-_speed);
+    }
 
 }
 
@@ -220,8 +232,13 @@ void MainWindow::on_bottom_pressed()
 void MainWindow::on_bottom_released()
 {
     std::cout << "stop going bottom " << std::endl;
-
+    if(_enregistrerState == 1){
+    // saving sequence
+    _mov->time =_mov->time - QDateTime::currentDateTime().toSecsSinceEpoch();
+    _sequence.push_back(*_mov);
+    }else {
     robot.sendMovement(0,0);
+    }
 }
 
 
@@ -230,17 +247,32 @@ void MainWindow::on_bottom_released()
 
 void MainWindow::on_left_pressed()
 {
+    if(_enregistrerState == 1){
+        _mov = new movement;
+        _mov->speedL = _speed;
+        _mov->speedR = 0;
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
+    }
+    else {
+    robot.sendMovement(_speed,0);
+    }
     std::cout << "going left " << std::endl;
 
-    robot.sendMovement(_speed,0);
 }
 
 
 void MainWindow::on_left_released()
 {
     std::cout << "stop going left " << std::endl;
+    if(_enregistrerState == 1){
+        // saving sequence
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;
+        _sequence.push_back(*_mov);
+        std::cout << "time " << _mov->time;
+    }else {
+        robot.sendMovement(0,0);
+    }
 
-    robot.sendMovement(0,0);
 }
 
 void MainWindow::on_right_pressed()
@@ -310,5 +342,34 @@ float MainWindow::movingAverage(float value){
         sum += _movingAverage[i];
     }return sum/10;
 //TODO
+}
+
+
+
+
+
+
+
+void MainWindow::on_enregistrer_clicked()
+{
+        if(_enregistrerState == 0){ // button was pressed for saving sequence
+            _enregistrerState = 1; // updating state
+        }
+        else if(_enregistrerState == 1){ // button was pressed for ending sequence saving
+            _enregistrerState = 0;
+        }
+        //TODO : change color somewhat
+        else {
+            _enregistrerState = 0; // reseting state because the state value is illegal !
+        }
+        std::cout << "state " << _enregistrerState << std::endl;
+
+}
+
+
+void MainWindow::on_executer_clicked()
+{
+        this->robot.sendSequence(_sequence);
+        _sequence.clear();
 }
 
