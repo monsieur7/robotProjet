@@ -136,7 +136,7 @@ void MainWindow::updateUI(){
     ui->HAUT_GAUCHE->show();
 
     palette = ui->BAS_DROIT->palette();
-    if(IL2 > 90){
+    if(IL2 > 85){
         IL2 = 100;
         palette.setColor(QPalette::Highlight, Qt::red); // Qpalette::Highlight is the progress bar color
 
