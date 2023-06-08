@@ -270,6 +270,17 @@ void MainWindow::on_verticalSlider_sliderMoved(int position)
 {
     this->_speed = position % 128;
     std::cout << "new speed " << this->_speed << std::endl;
+    int maxValue = ui->verticalSlider->maximum();  // Valeur maximale du curseur
+    double normalizedValue = static_cast<double>(_speed) / maxValue;
+
+    int red = static_cast<int>(255 * normalizedValue);
+    int green = static_cast<int>(255 * (1 - normalizedValue));
+
+    QString styleSheet = QString("QSlider::handle:vertical { background-color: rgb(%1, %2, %3); }")
+                             .arg(red).arg(green).arg(0);
+
+    ui->verticalSlider->setStyleSheet(styleSheet);
+
 }
 
 
