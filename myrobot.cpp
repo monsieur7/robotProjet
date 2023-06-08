@@ -57,18 +57,20 @@ void MyRobot::disconnected() {
 }
 
 void MyRobot::bytesWritten(qint64 bytes) {
-    //qDebug() << bytes << " bytes written...";
+    qDebug() << bytes << " bytes written...";
 }
 
 void MyRobot::readyRead() {
+    if(_connected == true){
   //  qDebug() << "reading..."; // read the data from the socket
     DataReceived = socket->readAll();
     emit updateUI(DataReceived);
     qDebug() << DataReceived[0] << DataReceived[1] << DataReceived[2];
+    }
 }
 
 void MyRobot::MyTimerSlot() {
-   // qDebug() << "Timer...";
+    qDebug() << "Timer...";
     while(Mutex.tryLock());
     socket->write(DataToSend);
     Mutex.unlock();
@@ -130,9 +132,21 @@ void MyRobot::sendMovement(int left, int right){
 
 void MyRobot::sendSequence(std::vector<movement> sequence){
     for(auto i : sequence){
+        std::cout << "speed : " << i.speedL << " " << i.speedR <<  "time " << i.time << std::endl;
         sendMovement(i.speedL, i.speedR);
-        //wait for
-        std::this_thread::sleep_for(std::chrono::seconds(i.time));
-        sendMovement(0,0);
+        //sending data :
+
+        MyTimerSlot();
+
+        QTimer::singleShot(i.time * 1000, [this]() {
+            // After the specified time, stop the movement
+            std::cout << "stopping robot " << std::endl;
+            sendMovement(0, 0);
+
+           // sending data :
+            MyTimerSlot();
+        });
+        QTimer::singleShot(100, [this]() {}); // wait before sending data again !
     }
+
 }

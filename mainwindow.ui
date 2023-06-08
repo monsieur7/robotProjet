@@ -224,14 +224,14 @@ QPushButton:pressed {
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>620</x>
+      <x>600</x>
       <y>450</y>
-      <width>67</width>
+      <width>101</width>
       <height>17</height>
      </rect>
     </property>
     <property name="text">
-     <string>Gauche</string>
+     <string>Gauche (cm/s)</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
@@ -239,12 +239,12 @@ QPushButton:pressed {
      <rect>
       <x>700</x>
       <y>450</y>
-      <width>67</width>
+      <width>91</width>
       <height>17</height>
      </rect>
     </property>
     <property name="text">
-     <string>Droite</string>
+     <string>Droite (cm/s)</string>
     </property>
    </widget>
    <widget class="QProgressBar" name="batterie">

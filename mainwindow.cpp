@@ -192,9 +192,15 @@ void MainWindow::on_actionSe_d_connecter_triggered()
 
 void MainWindow::on_Top_pressed()
 {
-    std::cout << "going top " << std::endl;
 
-    robot.sendMovement(_speed,_speed);
+    if(_enregistrerState == 1){
+        _mov = new movement;
+        _mov->speedL = _speed;
+        _mov->speedR = _speed;
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
+
+    }
+    else {robot.sendMovement(_speed,_speed);}
 }
 
 
@@ -202,9 +208,14 @@ void MainWindow::on_Top_pressed()
 
 void MainWindow::on_Top_released()
 {
-    std::cout << "stop going top " << std::endl;
-
-    robot.sendMovement(0,0);
+    if(_enregistrerState == 1){
+        // saving sequence
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;
+        _sequence.push_back(*_mov);
+        std::cout << "time " << _mov->time << std::endl;
+    }else {
+        robot.sendMovement(0,0);
+    }
 }
 
 
@@ -219,6 +230,8 @@ void MainWindow::on_bottom_pressed()
         _mov = new movement;
         _mov->speedL = -_speed;
         _mov->speedR = -_speed;
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
+
     }
     else {
     robot.sendMovement(-_speed,-_speed);
@@ -263,12 +276,10 @@ void MainWindow::on_left_pressed()
 
 void MainWindow::on_left_released()
 {
-    std::cout << "stop going left " << std::endl;
     if(_enregistrerState == 1){
         // saving sequence
         _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;
         _sequence.push_back(*_mov);
-        std::cout << "time " << _mov->time;
     }else {
         robot.sendMovement(0,0);
     }
@@ -277,16 +288,25 @@ void MainWindow::on_left_released()
 
 void MainWindow::on_right_pressed()
 {
-    std::cout << "going right " << std::endl;
+    if(_enregistrerState == 1){
+        _mov = new movement;
+        _mov->speedL = 0;
+        _mov->speedR = _speed;
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
+    }
+    else robot.sendMovement(0,_speed);
 
-    robot.sendMovement(0,_speed);
 }
 
 void MainWindow::on_right_released()
-{
-    std::cout << "stop going right " << std::endl;
 
-    robot.sendMovement(0,0);
+{    if(_enregistrerState == 1){
+        // saving sequence
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;
+        _sequence.push_back(*_mov);
+    }else {
+        robot.sendMovement(0,0);
+    }
 }
 
 void MainWindow::showCamera(QUrl url){
@@ -354,6 +374,7 @@ void MainWindow::on_enregistrer_clicked()
 {
         if(_enregistrerState == 0){ // button was pressed for saving sequence
             _enregistrerState = 1; // updating state
+          _sequence.clear(); // in case not done
         }
         else if(_enregistrerState == 1){ // button was pressed for ending sequence saving
             _enregistrerState = 0;
@@ -369,7 +390,10 @@ void MainWindow::on_enregistrer_clicked()
 
 void MainWindow::on_executer_clicked()
 {
+        if(this->robot.getConnected()){
         this->robot.sendSequence(_sequence);
+        std::cout << "sequence has been sent !" << std::endl;
         _sequence.clear();
+        }
 }
 
