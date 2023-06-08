@@ -32,6 +32,6 @@ void Login::on_connect_clicked()
     }
     else {
         // quit window
-        accept();
+        finished(1);
     }
 }

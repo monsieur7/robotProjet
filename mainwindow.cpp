@@ -7,11 +7,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 
-
-
     ui->setupUi(this);
-    this->showCamera(QUrl("http://192.168.1.106:8080/?action=stream"));
     login = new Login(nullptr, &robot);
+    connect(login, &QDialog::finished, this, [this](int result) {if(result == 1){this->showCamera(QUrl("http://192.168.1.106:8080/?action=stream"));}}); // open camera when the dialog is finished !
     connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI);
     _speedWheelL = 0;
     _speedWheelR = 0;
@@ -247,7 +245,7 @@ void MainWindow::on_bottom_released()
     std::cout << "stop going bottom " << std::endl;
     if(_enregistrerState == 1){
     // saving sequence
-    _mov->time =_mov->time - QDateTime::currentDateTime().toSecsSinceEpoch();
+    _mov->time =QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;
     _sequence.push_back(*_mov);
     }else {
     robot.sendMovement(0,0);
