@@ -9,6 +9,9 @@
 #include <QMutex>
 #include <iostream>
 #include <thread>
+#include <QEventLoop>
+#include <QDateTime>
+
 typedef struct movement {
     int speedL;
     int speedR;

@@ -134,19 +134,23 @@ void MyRobot::sendSequence(std::vector<movement> sequence){
     for(auto i : sequence){
         std::cout << "speed : " << i.speedL << " " << i.speedR <<  "time " << i.time << std::endl;
         sendMovement(i.speedL, i.speedR);
-        //sending data :
-
+        // sending data
         MyTimerSlot();
 
-        QTimer::singleShot(i.time * 1000, [this]() {
-            // After the specified time, stop the movement
-            std::cout << "stopping robot " << std::endl;
-            sendMovement(0, 0);
+        QEventLoop loop;
+        QTimer::singleShot(i.time * 1000, &loop, SLOT(quit())); // blocking delay
+        loop.exec();  // Blocking delay
 
-           // sending data :
-            MyTimerSlot();
-        });
-        QTimer::singleShot(100, [this]() {}); // wait before sending data again !
+        // After the specified time, stop the movement
+        std::cout << "stopping robot" << std::endl;
+        sendMovement(0, 0);
+
+        // sending data
+        MyTimerSlot();
+
+        QEventLoop loop2;
+        QTimer::singleShot(100, &loop2, SLOT(quit())); // blocking delay
+        loop2.exec();  // Blocking delay
     }
-
 }
+
