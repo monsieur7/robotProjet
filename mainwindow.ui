@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>WifiBot</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(170, 170, 255);
