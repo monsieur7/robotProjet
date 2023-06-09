@@ -422,6 +422,9 @@ QPushButton:pressed {
     <property name="text">
      <string>UP</string>
     </property>
+    <property name="shortcut">
+     <string>Up</string>
+    </property>
    </widget>
    <widget class="QPushButton" name="CAMERA_DOWN">
     <property name="geometry">
@@ -446,6 +449,9 @@ QPushButton:pressed {
     </property>
     <property name="text">
      <string>DOWN</string>
+    </property>
+    <property name="shortcut">
+     <string>Down</string>
     </property>
    </widget>
    <widget class="QPushButton" name="CAMERA_RIGHT">
@@ -472,6 +478,9 @@ QPushButton:pressed {
     <property name="text">
      <string>RIGHT</string>
     </property>
+    <property name="shortcut">
+     <string>Right</string>
+    </property>
    </widget>
    <widget class="QPushButton" name="CAMERA_LEFT">
     <property name="geometry">
@@ -496,6 +505,9 @@ QPushButton:pressed {
     </property>
     <property name="text">
      <string>LEFT</string>
+    </property>
+    <property name="shortcut">
+     <string>Left</string>
     </property>
    </widget>
    <widget class="QPushButton" name="enregistrer">

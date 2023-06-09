@@ -47,7 +47,7 @@ void MainWindow::updateUI(){
   //  robot.DataReceived;
 // code taken from docs
     int speedR, speedL, odometryL, odometryR, BatLevelR,CurrentL, CurrentR, VersionR, VersionL, dataL, dataR;
-    uint8_t BatLevelL, IR1, IR2,IL1, IL2;;
+    uint8_t BatLevelL, IR1, IR2,IL1, IL2;
 
 
 
