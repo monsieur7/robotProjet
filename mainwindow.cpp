@@ -318,7 +318,7 @@ void MainWindow::showCamera(QUrl url){
 
 void MainWindow::on_verticalSlider_sliderMoved(int position)
 {
-    this->_speed = position % 128;
+    this->_speed = position % 241;
     std::cout << "new speed " << this->_speed << std::endl;
     int maxValue = ui->verticalSlider->maximum();  // Valeur maximale du curseur
     double normalizedValue = static_cast<double>(_speed) / maxValue;
