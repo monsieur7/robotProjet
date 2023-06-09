@@ -35,13 +35,13 @@ bool MyRobot::doConnect() {
         return false;
     }
     TimerEnvoi->start(75);
-    _connected = true;
+    _connected = true; // setting connected state
     return true;
 }
 
 bool MyRobot::disConnect() {
-    _connected = false;
-    TimerEnvoi->stop();
+    _connected = false; // setting connected state
+    TimerEnvoi->stop(); // stopping event loop
     socket->close();
     return true;
 }
@@ -60,16 +60,16 @@ void MyRobot::bytesWritten(qint64 bytes) {
     qDebug() << bytes << " bytes written...";
 }
 
-void MyRobot::readyRead() {
+void MyRobot::readyRead() { //ready to read value
     if(_connected == true){
   //  qDebug() << "reading..."; // read the data from the socket
-    DataReceived = socket->readAll();
+    DataReceived = socket->readAll(); // inform main window that we have value to parse
     emit updateUI(DataReceived);
     qDebug() << DataReceived[0] << DataReceived[1] << DataReceived[2];
     }
 }
 
-void MyRobot::MyTimerSlot() {
+void MyRobot::MyTimerSlot() { // event loop (sending data every 2 seconds)
     qDebug() << "Timer...";
     while(Mutex.tryLock());
     socket->write(DataToSend);
@@ -107,32 +107,34 @@ int MyRobot::Crc16(unsigned char *Adresse_tab , unsigned char Taille_max) {
 }
 
 void MyRobot::sendMovement(int left, int right){
+
  if(_connected == true){
-    DataToSend[2] = abs(left) % 241;
+        // sending movement
+    DataToSend[2] = abs(left) % 241; // limiting value and speed (> 0) because <0 MEANS opposed direction
     DataToSend[3] = 0x0;
-    DataToSend[4] = abs(right) % 241;
+    DataToSend[4] = abs(right) % 241;// limiting value and speed (> 0) because <0 MEANS opposed direction
     DataToSend[5] = 0x0;
     if(left > 0){
-    DataToSend[6] = DataToSend[6] | 1 << 6;
+    DataToSend[6] = DataToSend[6] | 1 << 6; // motor direction
     }
     else {
         DataToSend[6] =DataToSend[6] & ~( 1 << 6);
     }
-    if(right > 0){
+    if(right > 0){// motor direction
     DataToSend[6] =  DataToSend[6] | 1 << 4;
     }
     else {
         DataToSend[6] =  DataToSend[6] & ~( 1 << 4);
 
     }
-    int crc = Crc16((unsigned char *)DataToSend.data(), 7);
+    int crc = Crc16((unsigned char *)DataToSend.data(), 7); // CRC: IMPORTANT
     std::cout << std::hex << "crc" << crc << std::endl;
     DataToSend[7] = crc;
     DataToSend[8] = crc >> 8;
  }
 }
 
-void MyRobot::sendSequence(std::vector<movement> sequence){
+void MyRobot::sendSequence(std::vector<movement> sequence){ // sending sequence
     for(auto i : sequence){
         std::cout << "speed : " << i.speedL << " " << i.speedR <<  "time " << i.time << std::endl;
         sendMovement(i.speedL, i.speedR);
