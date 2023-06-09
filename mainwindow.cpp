@@ -48,15 +48,8 @@ void MainWindow::on_actionSe_connecter_triggered()
 void MainWindow::updateUI(){
   //  robot.DataReceived;
 // code taken from docs
-<<<<<<< HEAD
     int speedR, speedL, odometryL, odometryR;
     uint8_t BatLevelL, IR1, IR2,IL1, IL2;;
-=======
-    int speedR, speedL, odometryL, odometryR, BatLevelR,CurrentL, CurrentR, VersionR, VersionL, dataL, dataR;
-    uint8_t BatLevelL, IR1, IR2,IL1, IL2;
->>>>>>> 4b10d4a39620a9994f69de8f5b93447b7cc3a6a1
-
-
 
     speedL=(int)((robot.DataReceived.data()[1] << 8) + robot.DataReceived.data()[0]);
     if (speedL > 32767) speedL=speedL-65536;
@@ -179,22 +172,38 @@ void MainWindow::updateUI(){
         if(ui->BAS_GAUCHE->value() == 100 ||ui->HAUT_GAUCHE->value() == 100){
             this->robot.sendMovement(0, 0); // stopping robot;
         }
+        break;
+
     case RIGHT: {
         if(ui->BAS_DROIT->value() == 100 ||ui->HAUT_DROITE->value() == 100){
             this->robot.sendMovement(0, 0); // stopping robot;
         }
+        break;
+
     }
     case BOTTOM : {
-        if(ui->BAS_GAUCHE->value() == 100 || ui->BAS_DROIT->value() == 100){
+        if(ui->BAS_GAUCHE->value() == 100 ||ui->BAS_DROIT->value() == 100){
             this->robot.sendMovement(0, 0); // stopping robot;
         }
+        break;
+
     }
     case TOP: {
         if(ui->HAUT_GAUCHE->value() == 100 ||ui->HAUT_DROITE->value() == 100){
             this->robot.sendMovement(0, 0); // stopping robot;
         }
-    }
+        break;
 
+    }
+    case STOPPED: {
+        break;
+    }default :        break;
+
+}
+
+
+
+       }
 
 
 }
