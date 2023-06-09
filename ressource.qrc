@@ -4,5 +4,6 @@
     </qresource>
     <qresource prefix="/">
         <file>wifibot-dplp.png</file>
+        <file>fond-metal-big.jpg</file>
     </qresource>
 </RCC>

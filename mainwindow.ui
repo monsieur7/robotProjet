@@ -19,7 +19,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QMainWindow {
-background-image : url(&quot;:/main/background/robotBackground.jpg&quot;);
+background-image : url(&quot;:/fond-metal-big.jpg&quot;);
 }
 QLabel {color:white};</string>
   </property>
@@ -590,7 +590,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>1453</width>
-     <height>22</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
