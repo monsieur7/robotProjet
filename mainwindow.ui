@@ -18,8 +18,10 @@
     <normaloff>:/Pictures/wifibot-dplp.png</normaloff>:/Pictures/wifibot-dplp.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image : url(&quot;:/main/background/robotBackground.jpg&quot;);
-</string>
+   <string notr="true">QMainWindow {
+background-image : url(&quot;:/main/background/robotBackground.jpg&quot;);
+}
+QLabel {color:white};</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="gridLayoutWidget">
@@ -32,7 +34,7 @@
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="5" column="0">
+     <item row="3" column="0">
       <spacer name="verticalSpacer_2">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -45,7 +47,7 @@
        </property>
       </spacer>
      </item>
-     <item row="7" column="0">
+     <item row="14" column="0">
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -58,7 +60,7 @@
        </property>
       </spacer>
      </item>
-     <item row="1" column="0">
+     <item row="0" column="0">
       <widget class="QPushButton" name="Top">
        <property name="styleSheet">
         <string notr="true">QPushButton {
@@ -80,7 +82,10 @@ QPushButton:pressed {
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="5" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout"/>
+     </item>
+     <item row="7" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QPushButton" name="left">
@@ -128,28 +133,6 @@ QPushButton:pressed {
        </item>
       </layout>
      </item>
-     <item row="4" column="0">
-      <widget class="QPushButton" name="bottom">
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: red;
-    border-style: outset;
-    border-width: 2px;
-    border-color: black;
-}
-
-QPushButton:pressed {
-    background-color: green; 
-}</string>
-       </property>
-       <property name="text">
-        <string>Bottom</string>
-       </property>
-       <property name="shortcut">
-        <string>S</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="gridLayoutWidget_2">
@@ -177,8 +160,11 @@ QPushButton:pressed {
     background-color: rgb(0, 255, 0); 
 }</string>
     </property>
+    <property name="minimum">
+     <number>130</number>
+    </property>
     <property name="maximum">
-     <number>127</number>
+     <number>240</number>
     </property>
     <property name="orientation">
      <enum>Qt::Vertical</enum>
@@ -194,7 +180,7 @@ QPushButton:pressed {
      </rect>
     </property>
     <property name="text">
-     <string>0</string>
+     <string>130</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -207,7 +193,7 @@ QPushButton:pressed {
      </rect>
     </property>
     <property name="text">
-     <string>127</string>
+     <string>240</string>
     </property>
    </widget>
    <widget class="QLCDNumber" name="gauche_lcd">
@@ -329,7 +315,7 @@ QLabel[myBatteryProperty] {
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>500</y>
+      <y>510</y>
       <width>160</width>
       <height>111</height>
      </rect>
@@ -361,7 +347,7 @@ QLabel[myBatteryProperty] {
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>480</y>
+      <y>490</y>
       <width>67</width>
       <height>17</height>
      </rect>
@@ -373,8 +359,8 @@ QLabel[myBatteryProperty] {
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>480</y>
+      <x>280</x>
+      <y>490</y>
       <width>67</width>
       <height>17</height>
      </rect>
@@ -404,6 +390,9 @@ QLabel[myBatteryProperty] {
       <width>67</width>
       <height>17</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>Arrière</string>
@@ -518,6 +507,9 @@ QPushButton:pressed {
       <height>21</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : rgb(255, 255, 255);</string>
+    </property>
     <property name="text">
      <string>enregisrer</string>
     </property>
@@ -530,6 +522,9 @@ QPushButton:pressed {
       <width>81</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : rgb(255, 255, 255);</string>
     </property>
     <property name="text">
      <string>exécuter</string>
@@ -546,6 +541,34 @@ QPushButton:pressed {
     </property>
     <property name="text">
      <string>séquence</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="bottom">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>380</y>
+      <width>459</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: red;
+    border-style: outset;
+    border-width: 2px;
+    border-color: black;
+}
+
+QPushButton:pressed {
+    background-color: green; 
+}</string>
+    </property>
+    <property name="text">
+     <string>Bottom</string>
+    </property>
+    <property name="shortcut">
+     <string>S</string>
     </property>
    </widget>
   </widget>

@@ -318,7 +318,7 @@ void MainWindow::showCamera(QUrl url){
 
 void MainWindow::on_verticalSlider_sliderMoved(int position)
 {
-    this->_speed = position % 128;
+    this->_speed = position % 241;
     std::cout << "new speed " << this->_speed << std::endl;
     int maxValue = ui->verticalSlider->maximum();  // Valeur maximale du curseur
     double normalizedValue = static_cast<double>(_speed) / maxValue;
@@ -384,9 +384,12 @@ void MainWindow::on_enregistrer_clicked()
         if(_enregistrerState == 0){ // button was pressed for saving sequence
             _enregistrerState = 1; // updating state
           _sequence.clear(); // in case not done
+            // changing button color
+            this->ui->enregistrer->setStyleSheet("background-color: red;");
         }
         else if(_enregistrerState == 1){ // button was pressed for ending sequence saving
             _enregistrerState = 0;
+            this->ui->enregistrer->setStyleSheet("background-color: green;");
         }
         //TODO : change color somewhat
         else {
@@ -403,6 +406,8 @@ void MainWindow::on_executer_clicked()
         this->robot.sendSequence(_sequence);
         std::cout << "sequence has been sent !" << std::endl;
         _sequence.clear();
+        this->ui->enregistrer->setStyleSheet("background-color: rgb(255, 255, 255);");
+
         }
 }
 
