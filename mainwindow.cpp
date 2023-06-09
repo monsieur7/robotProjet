@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     login = new Login(nullptr, &robot);
     // on connected : show camera ! (only one time
-    connect(login, &QDialog::finished, this, [this](int result) {if(result == 1 && this->robot.getConnected() == false){this->showCamera(QUrl("http://192.168.1.106:8080/?action=stream"));}}); // open camera when the dialog is finished !
+    connect(login, &QDialog::finished, this, [this](int result) {if(result == 1){this->showCamera(QUrl("http://192.168.1.106:8080/?action=stream"));}}); // open camera when the dialog is finished !
     connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI);
     _speedWheelL = 0;
     _speedWheelR = 0;
@@ -22,8 +22,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->BAS_GAUCHE->setValue(0);
     ui->HAUT_DROITE->setValue(0);
     ui->HAUT_GAUCHE->setValue(0);
+    ui->GAUCHE_DISTANCE->display(0);
+    ui->DROITE_DISTANCE->display(0);
+
     _cameraMove = new cameraMove(); // init camera movement
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 10; i++){ // moving average (todo)
         _movingAverage[i] = 0;
     }
     _enregistrerState = 0; // state of enregistrer button
@@ -77,6 +80,11 @@ void MainWindow::updateUI(){
     float currentSpeedR =((( odometryR - _speedWheelR )/ 2248.0f ) * 0.39f)/ (float)(dt-_oldTime);// 2448 ticks per wheel turn
     float currentSpeedL =((( odometryL - _speedWheelL )/2448.0f) *0.39f)/ (float)(dt-_oldTime) ; // same
 
+    float distanceL =     distanceL = (((( odometryL )/2448.0f) *0.39f)); // updating distance value !
+    float distanceR =     distanceR = (((( odometryR )/2448.0f) *0.39f));
+
+
+
     /*if(odometryR = _speedWheelR){ // debug
         currentSpeedR = 0;
     }
@@ -99,7 +107,9 @@ void MainWindow::updateUI(){
     _speedWheelL = odometryL; // update old  speed
      _speedWheelR = odometryR; // update old  speed
     _oldTime = dt; // update old time
-
+    //setting distance :
+    ui->GAUCHE_DISTANCE->display(distanceL);
+    ui->DROITE_DISTANCE->display(distanceR);
 
     //SETTING IR :
 
@@ -174,12 +184,16 @@ void MainWindow::updateUI(){
     case LEFT : {
         if(ui->BAS_GAUCHE->value() == 100 ||ui->HAUT_GAUCHE->value() == 100){
             this->robot.sendMovement(0, 0); // stopping robot;
+            _movementType = STOPPED;
+
         }
         break;
 
     case RIGHT: {
         if(ui->BAS_DROIT->value() == 100 ||ui->HAUT_DROITE->value() == 100){
             this->robot.sendMovement(0, 0); // stopping robot;
+            _movementType = STOPPED;
+
         }
         break;
 
@@ -187,6 +201,7 @@ void MainWindow::updateUI(){
     case BOTTOM : {
         if(ui->BAS_GAUCHE->value() == 100 ||ui->BAS_DROIT->value() == 100){
             this->robot.sendMovement(0, 0); // stopping robot;
+            _movementType = STOPPED;
         }
         break;
 
@@ -194,6 +209,8 @@ void MainWindow::updateUI(){
     case TOP: {
         if(ui->HAUT_GAUCHE->value() == 100 ||ui->HAUT_DROITE->value() == 100){
             this->robot.sendMovement(0, 0); // stopping robot;
+            _movementType = STOPPED;
+
         }
         break;
 
