@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->HAUT_GAUCHE->setValue(0);
     ui->GAUCHE_DISTANCE->display(0);
     ui->DROITE_DISTANCE->display(0);
-
     _cameraMove = new cameraMove(); // init camera movement
     for(int i = 0; i < 10; i++){ // moving average (todo)
         _movingAverage[i] = 0;
@@ -481,3 +480,82 @@ void MainWindow::on_executer_clicked()
         }
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *event){
+        if(event->key() == Qt::Key_Z){
+        if(event->type() == QEvent::KeyPress){
+        this->on_Top_pressed();
+        }
+
+        }
+        if(event->key() == Qt::Key_S){
+        if(event->type() == QEvent::KeyPress){
+        this->on_bottom_pressed();
+        }
+
+        }
+
+        if(event->key() == Qt::Key_Q){
+        if(event->type() == QEvent::KeyPress){
+        this->on_left_pressed();
+        }
+
+        }
+
+        if(event->key() == Qt::Key_D){
+        if(event->type() == QEvent::KeyPress){
+        this->on_right_pressed();
+        }
+
+        }
+        if(event->key() == Qt::Key_Up){
+        if(event->type() == QEvent::KeyPress){
+        this->_cameraMove->moveCameraUp();
+        }
+
+        }
+        if(event->key() == Qt::Key_Down){
+        if(event->type() == QEvent::KeyPress){
+        this->_cameraMove->moveCameraDown();
+        }
+
+        }
+        if(event->key() == Qt::Key_Right){
+        if(event->type() == QEvent::KeyPress){
+        this->_cameraMove->moveCameraRight();
+        }
+
+        }
+        if(event->key() == Qt::Key_Left){
+        if(event->type() == QEvent::KeyPress){
+        this->_cameraMove->moveCameraLeft();
+        }
+
+        }
+
+
+}
+void MainWindow::keyReleaseEvent(QKeyEvent *event){
+
+        if(event->key() == Qt::Key_Z){
+        if(event->type() == QEvent::KeyRelease){
+        this->on_Top_released();
+        }
+        }
+        if(event->key() == Qt::Key_S){
+        if(event->type() == QEvent::KeyRelease){
+        this->on_bottom_released();
+        }
+        }
+        if(event->key() == Qt::Key_Q){
+        if(event->type() == QEvent::KeyRelease){
+        this->on_left_released();
+        }
+        }
+        if(event->key() == Qt::Key_D){
+        if(event->type() == QEvent::KeyRelease){
+        this->on_right_released();
+        }
+
+        }
+
+}

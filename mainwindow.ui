@@ -66,9 +66,6 @@ QPushButton:pressed {
          <property name="text">
           <string>Left</string>
          </property>
-         <property name="shortcut">
-          <string>Q</string>
-         </property>
         </widget>
        </item>
        <item>
@@ -100,9 +97,6 @@ QPushButton:pressed {
          </property>
          <property name="text">
           <string>Right</string>
-         </property>
-         <property name="shortcut">
-          <string>D</string>
          </property>
         </widget>
        </item>
@@ -139,9 +133,6 @@ QPushButton:pressed {
          </property>
          <property name="text">
           <string>Top</string>
-         </property>
-         <property name="shortcut">
-          <string>Z</string>
          </property>
         </widget>
        </item>
@@ -204,9 +195,6 @@ QPushButton:pressed {
          </property>
          <property name="text">
           <string>Bottom</string>
-         </property>
-         <property name="shortcut">
-          <string>S</string>
          </property>
         </widget>
        </item>
@@ -280,12 +268,12 @@ QPushButton:pressed {
      <rect>
       <x>690</x>
       <y>20</y>
-      <width>49</width>
+      <width>151</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>240 / 3.6 km/h</string>
+     <string>240</string>
     </property>
    </widget>
    <widget class="QLCDNumber" name="gauche_lcd">
@@ -514,9 +502,6 @@ QPushButton:pressed {
     <property name="text">
      <string>UP</string>
     </property>
-    <property name="shortcut">
-     <string>Up</string>
-    </property>
    </widget>
    <widget class="QPushButton" name="CAMERA_DOWN">
     <property name="geometry">
@@ -541,9 +526,6 @@ QPushButton:pressed {
     </property>
     <property name="text">
      <string>DOWN</string>
-    </property>
-    <property name="shortcut">
-     <string>Down</string>
     </property>
    </widget>
    <widget class="QPushButton" name="CAMERA_RIGHT">
@@ -570,9 +552,6 @@ QPushButton:pressed {
     <property name="text">
      <string>RIGHT</string>
     </property>
-    <property name="shortcut">
-     <string>Right</string>
-    </property>
    </widget>
    <widget class="QPushButton" name="CAMERA_LEFT">
     <property name="geometry">
@@ -597,9 +576,6 @@ QPushButton:pressed {
     </property>
     <property name="text">
      <string>LEFT</string>
-    </property>
-    <property name="shortcut">
-     <string>Left</string>
     </property>
    </widget>
    <widget class="QPushButton" name="enregistrer">
@@ -700,7 +676,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>1453</width>
-     <height>27</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

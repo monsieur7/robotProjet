@@ -19,7 +19,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QDialog {
-background-image : url(&quot;:/main/background/robotBackground.jpg&quot;);
+background-image : url(&quot;:/fond-metal-big.jpg&quot;);
 }</string>
   </property>
   <widget class="QWidget" name="verticalLayoutWidget">

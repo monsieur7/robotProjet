@@ -14,6 +14,7 @@
 #include <QWebEngineView>
 #include "cameramove.h"
 #include <vector>
+#include <QKeyEvent>
 namespace Ui {
 class MainWindow;
 }
@@ -66,6 +67,7 @@ private slots:
 
     void on_executer_clicked();
 
+
 private:
     Ui::MainWindow *ui;
     Login *login;
@@ -87,8 +89,9 @@ private:
     std::vector<movement> _sequence;
     movement * _mov;
     MOVEMENT_TYPE _movementType;
-
-
+protected:
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent (QKeyEvent *event);
 };
 
 #endif // MAINWINDOW_H
