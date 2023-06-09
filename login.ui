@@ -11,7 +11,15 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Login</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="ressource.qrc">
+    <normaloff>:/Pictures/wifibot-dplp.png</normaloff>:/Pictures/wifibot-dplp.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(170, 170, 255);
+</string>
   </property>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
@@ -31,6 +39,18 @@
     </item>
     <item>
      <widget class="QPushButton" name="connect">
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: red;
+    border-style: outset;
+    border-width: 2px;
+    border-color: black;
+}
+
+QPushButton:pressed {
+    background-color: green; 
+}</string>
+      </property>
       <property name="text">
        <string>Connect</string>
       </property>
@@ -39,6 +59,8 @@
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="ressource.qrc"/>
+ </resources>
  <connections/>
 </ui>

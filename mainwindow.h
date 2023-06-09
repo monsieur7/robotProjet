@@ -13,6 +13,7 @@
 #include "myrobot.h"
 #include <QWebEngineView>
 #include "cameramove.h"
+#include <vector>
 namespace Ui {
 class MainWindow;
 }
@@ -61,6 +62,10 @@ private slots:
 
     float movingAverage(float value);
 
+    void on_enregistrer_clicked();
+
+    void on_executer_clicked();
+
 private:
     Ui::MainWindow *ui;
     Login *login;
@@ -76,6 +81,13 @@ private:
     long _oldTime;
     cameraMove * _cameraMove;
     float _movingAverage[10];
+    int _enregistrerState;
+    std::vector<long> _time_between_press;
+
+    std::vector<movement> _sequence;
+    movement * _mov;
+    MOVEMENT_TYPE _movementType;
+
 
 };
 

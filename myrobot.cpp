@@ -35,10 +35,12 @@ bool MyRobot::doConnect() {
         return false;
     }
     TimerEnvoi->start(75);
+    _connected = true;
     return true;
 }
 
 bool MyRobot::disConnect() {
+    _connected = false;
     TimerEnvoi->stop();
     socket->close();
     return true;
@@ -47,24 +49,28 @@ bool MyRobot::disConnect() {
 void MyRobot::connected() {
     qDebug() << "connected..."; // Hey server, tell me about you.
 }
-
+bool MyRobot::getConnected(){
+    return _connected;
+}
 void MyRobot::disconnected() {
     qDebug() << "disconnected...";
 }
 
 void MyRobot::bytesWritten(qint64 bytes) {
-    //qDebug() << bytes << " bytes written...";
+    qDebug() << bytes << " bytes written...";
 }
 
 void MyRobot::readyRead() {
-    qDebug() << "reading..."; // read the data from the socket
+    if(_connected == true){
+  //  qDebug() << "reading..."; // read the data from the socket
     DataReceived = socket->readAll();
     emit updateUI(DataReceived);
     qDebug() << DataReceived[0] << DataReceived[1] << DataReceived[2];
+    }
 }
 
 void MyRobot::MyTimerSlot() {
-   // qDebug() << "Timer...";
+    qDebug() << "Timer...";
     while(Mutex.tryLock());
     socket->write(DataToSend);
     Mutex.unlock();
@@ -101,6 +107,7 @@ int MyRobot::Crc16(unsigned char *Adresse_tab , unsigned char Taille_max) {
 }
 
 void MyRobot::sendMovement(int left, int right){
+ if(_connected == true){
     DataToSend[2] = abs(left) % 241;
     DataToSend[3] = 0x0;
     DataToSend[4] = abs(right) % 241;
@@ -122,4 +129,30 @@ void MyRobot::sendMovement(int left, int right){
     std::cout << std::hex << "crc" << crc << std::endl;
     DataToSend[7] = crc;
     DataToSend[8] = crc >> 8;
+ }
 }
+
+void MyRobot::sendSequence(std::vector<movement> sequence){
+    for(auto i : sequence){
+        std::cout << "speed : " << i.speedL << " " << i.speedR <<  "time " << i.time << std::endl;
+        sendMovement(i.speedL, i.speedR);
+        // sending data
+        MyTimerSlot();
+
+        QEventLoop loop;
+        QTimer::singleShot(i.time * 1000, &loop, SLOT(quit())); // blocking delay
+        loop.exec();  // Blocking delay
+
+        // After the specified time, stop the movement
+        std::cout << "stopping robot" << std::endl;
+        sendMovement(0, 0);
+
+        // sending data
+        MyTimerSlot();
+
+        QEventLoop loop2;
+        QTimer::singleShot(100, &loop2, SLOT(quit())); // blocking delay
+        loop2.exec();  // Blocking delay
+    }
+}
+

@@ -7,11 +7,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 
-
-
     ui->setupUi(this);
-    this->showCamera(QUrl("http://192.168.1.106:8080/?action=stream"));
     login = new Login(nullptr, &robot);
+    connect(login, &QDialog::finished, this, [this](int result) {if(result == 1){this->showCamera(QUrl("http://192.168.1.106:8080/?action=stream"));}}); // open camera when the dialog is finished !
     connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI);
     _speedWheelL = 0;
     _speedWheelR = 0;
@@ -27,6 +25,9 @@ MainWindow::MainWindow(QWidget *parent) :
     for(int i = 0; i < 10; i++){
         _movingAverage[i] = 0;
     }
+    _enregistrerState = 0; // state of enregistrer button
+    _speed = 130; // default value for robot speed
+    _movementType = STOPPED;
 
 
 }
@@ -47,10 +48,8 @@ void MainWindow::on_actionSe_connecter_triggered()
 void MainWindow::updateUI(){
   //  robot.DataReceived;
 // code taken from docs
-    int speedR, speedL, odometryL, odometryR, BatLevelR,CurrentL, CurrentR, VersionR, VersionL, dataL, dataR;
+    int speedR, speedL, odometryL, odometryR;
     uint8_t BatLevelL, IR1, IR2,IL1, IL2;;
-
-
 
     speedL=(int)((robot.DataReceived.data()[1] << 8) + robot.DataReceived.data()[0]);
     if (speedL > 32767) speedL=speedL-65536;
@@ -64,17 +63,12 @@ void MainWindow::updateUI(){
     speedR=(int)(robot.DataReceived.data()[10] << 8) + robot.DataReceived.data()[9];
     if (speedR > 32767) speedR=speedR-65536;
 
-    BatLevelR=0;
     IR1=robot.DataReceived.data()[11];
     IR2=robot.DataReceived.data()[12];
 
     odometryR=((((long)robot.DataReceived.data()[16] << 24))+(((long)robot.DataReceived.data()[15] << 16))+(((long)robot.DataReceived.data()[14] << 8))+((long)robot.DataReceived.data()[13]));
 
-    CurrentL=robot.DataReceived.data()[17];
-    CurrentR=robot.DataReceived.data()[17];
 
-    VersionL=robot.DataReceived.data()[18];
-    VersionR=robot.DataReceived.data()[18];
     int dt = QDateTime::currentDateTime().toMSecsSinceEpoch();
     // DIAMETRE ROUE : 12.5cm
     // circonférence roues : 0.39m
@@ -90,15 +84,15 @@ void MainWindow::updateUI(){
     }
 */
     // speed = d / t => d = number of wheel turn * pi * wheel diameter
-    qDebug() << "data received " << BatLevelL << " " << IR1 << " "<<  IR2 <<" " << IL1 << " " << IL2<< "\n";
+    /*qDebug() << "data received " << BatLevelL << " " << IR1 << " "<<  IR2 <<" " << IL1 << " " << IL2<< "\n";
     qDebug() << "speed " << currentSpeedR << " " << currentSpeedL << "\n";
     qDebug() << "odometry L" << (((odometryL - _speedWheelL)/2448.0f)*0.39f)/(float)dt << "odometry R" << (((odometryR - _speedWheelR)/2448.0f)*0.39f)/(float)dt  << "\n";
     qDebug() << "dt " << (float)(dt-_oldTime) << "\n";
+*/
     //TODO  : moving average !
     ui->gauche_lcd->display(currentSpeedL*1000); // displaying left speed in cm/s
     ui->droite_lcd->display(currentSpeedR*1000); // displaying right speed in cm/s
     ui->batterie->setValue(map(BatLevelL, 0, 255, 0, 100)); // set batterie level
-    ui->batterie->setProperty("myBatteryProperty", BatLevelR);
 
     _speedWheelL = odometryL; // update old  speed
      _speedWheelR = odometryR; // update old  speed
@@ -172,6 +166,44 @@ void MainWindow::updateUI(){
     ui->BAS_GAUCHE->setValue(IR2); // set batterie level
 
 
+//stopping if we have an ir obstacle :
+   switch(_movementType){
+    case LEFT : {
+        if(ui->BAS_GAUCHE->value() == 100 ||ui->HAUT_GAUCHE->value() == 100){
+            this->robot.sendMovement(0, 0); // stopping robot;
+        }
+        break;
+
+    case RIGHT: {
+        if(ui->BAS_DROIT->value() == 100 ||ui->HAUT_DROITE->value() == 100){
+            this->robot.sendMovement(0, 0); // stopping robot;
+        }
+        break;
+
+    }
+    case BOTTOM : {
+        if(ui->BAS_GAUCHE->value() == 100 ||ui->BAS_DROIT->value() == 100){
+            this->robot.sendMovement(0, 0); // stopping robot;
+        }
+        break;
+
+    }
+    case TOP: {
+        if(ui->HAUT_GAUCHE->value() == 100 ||ui->HAUT_DROITE->value() == 100){
+            this->robot.sendMovement(0, 0); // stopping robot;
+        }
+        break;
+
+    }
+    case STOPPED: {
+        break;
+    }default :        break;
+
+}
+
+
+
+       }
 
 
 }
@@ -183,14 +215,26 @@ long MainWindow::map(long x, long in_min, long in_max, long out_min, long out_ma
 
 void MainWindow::on_actionSe_d_connecter_triggered()
 {
-    robot.disConnect();
+    if(robot.getConnected() == true){
+        robot.disConnect();
+    }
 }
 
 void MainWindow::on_Top_pressed()
 {
-    std::cout << "going top " << std::endl;
 
-    robot.sendMovement(_speed,_speed);
+    if(_enregistrerState == 1){
+        _mov = new movement;
+        _mov->speedL = _speed;
+        _mov->speedR = _speed;
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
+    }
+    else {
+
+        robot.sendMovement(_speed,_speed);
+        _movementType = TOP;
+
+    }
 }
 
 
@@ -198,9 +242,15 @@ void MainWindow::on_Top_pressed()
 
 void MainWindow::on_Top_released()
 {
-    std::cout << "stop going top " << std::endl;
-
-    robot.sendMovement(0,0);
+    if(_enregistrerState == 1){
+        // saving sequence
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;
+        _sequence.push_back(*_mov);
+        std::cout << "time " << _mov->time << std::endl;
+    }else {
+        robot.sendMovement(0,0);
+        _movementType = STOPPED;
+    }
 }
 
 
@@ -208,9 +258,21 @@ void MainWindow::on_Top_released()
 
 void MainWindow::on_bottom_pressed()
 {
-    std::cout << "going bottom " << std::endl;
 
-    robot.sendMovement(-_speed,-_speed);
+
+    std::cout << "going bottom " << std::endl;
+    if(_enregistrerState == 1){
+        _mov = new movement;
+        _mov->speedL = -_speed;
+        _mov->speedR = -_speed;
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
+
+
+    }
+    else {
+            robot.sendMovement(-_speed,-_speed);
+        _movementType = BOTTOM;
+    }
 
 }
 
@@ -220,8 +282,15 @@ void MainWindow::on_bottom_pressed()
 void MainWindow::on_bottom_released()
 {
     std::cout << "stop going bottom " << std::endl;
+    if(_enregistrerState == 1){
+    // saving sequence
+    _mov->time =QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;
 
+    _sequence.push_back(*_mov);
+    }else {
     robot.sendMovement(0,0);
+    _movementType = STOPPED;
+    }
 }
 
 
@@ -230,31 +299,65 @@ void MainWindow::on_bottom_released()
 
 void MainWindow::on_left_pressed()
 {
-    std::cout << "going left " << std::endl;
+    if(_enregistrerState == 1){
+        _mov = new movement;
+        _mov->speedL = _speed;
+        _mov->speedR = 0;
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
+
+    }
+    else {
 
     robot.sendMovement(_speed,0);
+        _movementType = LEFT;
+
+    }
+    std::cout << "going left " << std::endl;
+
 }
 
 
 void MainWindow::on_left_released()
 {
-    std::cout << "stop going left " << std::endl;
+    if(_enregistrerState == 1){
+        // saving sequence
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;
 
-    robot.sendMovement(0,0);
+        _sequence.push_back(*_mov);
+        _movementType = STOPPED;
+    }else {
+        robot.sendMovement(0,0);
+    }
+
 }
 
 void MainWindow::on_right_pressed()
 {
-    std::cout << "going right " << std::endl;
+    if(_enregistrerState == 1){
+        _mov = new movement;
+        _mov->speedL = 0;
+        _mov->speedR = _speed;
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
 
-    robot.sendMovement(0,_speed);
+    }
+
+     robot.sendMovement(0,_speed);
+    _movementType = RIGHT;
+
 }
 
 void MainWindow::on_right_released()
-{
-    std::cout << "stop going right " << std::endl;
 
-    robot.sendMovement(0,0);
+{    if(_enregistrerState == 1){
+        // saving sequence
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;
+
+        _sequence.push_back(*_mov);
+    }else {
+        robot.sendMovement(0,0);
+        _movementType = STOPPED;
+
+    }
 }
 
 void MainWindow::showCamera(QUrl url){
@@ -268,8 +371,19 @@ void MainWindow::showCamera(QUrl url){
 
 void MainWindow::on_verticalSlider_sliderMoved(int position)
 {
-    this->_speed = position % 128;
+    this->_speed = position % 241;
     std::cout << "new speed " << this->_speed << std::endl;
+    int maxValue = ui->verticalSlider->maximum();  // Valeur maximale du curseur
+    double normalizedValue = static_cast<double>(_speed) / maxValue;
+
+    int red = static_cast<int>(255 * normalizedValue);
+    int green = static_cast<int>(255 * (1 - normalizedValue));
+
+    QString styleSheet = QString("QSlider::handle:vertical { background-color: rgb(%1, %2, %3); }")
+                             .arg(red).arg(green).arg(0);
+
+    ui->verticalSlider->setStyleSheet(styleSheet);
+
 }
 
 
@@ -310,5 +424,45 @@ float MainWindow::movingAverage(float value){
         sum += _movingAverage[i];
     }return sum/10;
 //TODO
+}
+
+
+
+
+
+
+
+void MainWindow::on_enregistrer_clicked()
+{
+        if(_enregistrerState == 0){ // button was pressed for saving sequence
+            _enregistrerState = 1; // updating state
+          _sequence.clear(); // in case not done
+            // changing button color
+            this->ui->enregistrer->setStyleSheet("background-color: red;");
+        }
+        else if(_enregistrerState == 1){ // button was pressed for ending sequence saving
+            _enregistrerState = 0;
+            this->ui->enregistrer->setStyleSheet("background-color: green;");
+        }
+        //TODO : change color somewhat
+        else {
+            _enregistrerState = 0; // reseting state because the state value is illegal !
+        }
+        std::cout << "state " << _enregistrerState << std::endl;
+
+}
+
+
+void MainWindow::on_executer_clicked()
+
+{
+        if(_enregistrerState == 0){
+        if(this->robot.getConnected()){
+        this->robot.sendSequence(_sequence);
+        std::cout << "sequence has been sent !" << std::endl;
+        _sequence.clear();
+        this->ui->enregistrer->setStyleSheet("background-color: rgb(255, 255, 255);");
+        }
+        }
 }
 
