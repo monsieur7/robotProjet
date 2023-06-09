@@ -14,12 +14,13 @@
    <string>Login</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="ressource.qrc">
+   <iconset>
     <normaloff>:/Pictures/wifibot-dplp.png</normaloff>:/Pictures/wifibot-dplp.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(170, 170, 255);
-</string>
+   <string notr="true">QDialog {
+background-image : url(&quot;:/main/background/robotBackground.jpg&quot;);
+}</string>
   </property>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
@@ -59,8 +60,6 @@ QPushButton:pressed {
    </layout>
   </widget>
  </widget>
- <resources>
-  <include location="ressource.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -92,9 +92,9 @@ void MainWindow::updateUI(){
     //TODO  : moving average !
     ui->gauche_lcd->display(currentSpeedL*1000); // displaying left speed in cm/s
     ui->droite_lcd->display(currentSpeedR*1000); // displaying right speed in cm/s
-    ui->batterie->setRange(0, 100); // 10* the battery voltage
-    ui->batterie->setValue(map(BatLevelL, 12, 101, 0, 100)); // set batterie level
-
+    ui->batterie->setRange(0, 100); // 10* the battery voltage  (101 : 10.1v)
+    ui->batterie->setValue(map(std::min<uint8_t>(BatLevelL, (uint8_t) 101), 12, 101, 0, 100)); // set batterie level
+    qDebug() << "batlevel " << std::min<uint8_t>(BatLevelL, (uint8_t) 101) <<  "level" << ui->batterie->value() << "\n";
     _speedWheelL = odometryL; // update old  speed
      _speedWheelR = odometryR; // update old  speed
     _oldTime = dt; // update old time
@@ -198,13 +198,11 @@ void MainWindow::updateUI(){
     }
     case STOPPED: {
         break;
-    }default :        break;
+    }default :  break;
+
+    }
 
 }
-
-
-
-       }
 
 
 }
@@ -341,9 +339,10 @@ void MainWindow::on_right_pressed()
         _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
 
     }
-
+    else {
      robot.sendMovement(0,_speed);
     _movementType = RIGHT;
+    }
 
 }
 
