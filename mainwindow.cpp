@@ -176,11 +176,11 @@ void MainWindow::updateUI(){
 //stopping if we have an ir obstacle :
    switch(_movementType){
     case LEFT : {
-        if(ui->BAS_GAUCHE->value() == 100 || ui->HAUT_GAUCHE == 100){
+        if(ui->BAS_GAUCHE->value() == 100 ||ui->HAUT_GAUCHE == 100){
             this->robot.sendMovement(0, 0); // stopping robot;
         }
     case RIGHT: {
-        if(ui->BAS_DROIT->value() == 100 || ui->HAUT_DROIT == 100){
+        if(ui->BAS_DROIT->value() == 100 ||ui->HAUT_DROITE == 100){
             this->robot.sendMovement(0, 0); // stopping robot;
         }
     }
@@ -190,7 +190,7 @@ void MainWindow::updateUI(){
         }
     }
     case TOP: {
-        if(ui->BAS_GAUCHE->value() == 100 || ui->HAUT_GAUCHE == 100){
+        if(ui->HAUT_GAUCHE->value() == 100 ||ui->HAUT_DROITE == 100){
             this->robot.sendMovement(0, 0); // stopping robot;
         }
     }
