@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
     login = new Login(nullptr, &robot);
+    // on connected : show camera ! (only one time
     connect(login, &QDialog::finished, this, [this](int result) {if(result == 1){this->showCamera(QUrl("http://192.168.1.106:8080/?action=stream"));}}); // open camera when the dialog is finished !
     connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI);
     _speedWheelL = 0;
@@ -21,13 +22,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->BAS_GAUCHE->setValue(0);
     ui->HAUT_DROITE->setValue(0);
     ui->HAUT_GAUCHE->setValue(0);
+    ui->GAUCHE_DISTANCE->display(0);
+    ui->DROITE_DISTANCE->display(0);
+
     _cameraMove = new cameraMove(); // init camera movement
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 10; i++){ // moving average (todo)
         _movingAverage[i] = 0;
     }
     _enregistrerState = 0; // state of enregistrer button
-    _speed = 130; // default value for robot speed
-    _movementType = STOPPED;
+    this->on_verticalSlider_sliderMoved(ui->verticalSlider->minimum()); // setting min value and color for speed color
+    _movementType = STOPPED; // default value
 
 
 }
@@ -68,13 +72,18 @@ void MainWindow::updateUI(){
 
     odometryR=((((long)robot.DataReceived.data()[16] << 24))+(((long)robot.DataReceived.data()[15] << 16))+(((long)robot.DataReceived.data()[14] << 8))+((long)robot.DataReceived.data()[13]));
 
-
+    //getting value !
     int dt = QDateTime::currentDateTime().toMSecsSinceEpoch();
     // DIAMETRE ROUE : 12.5cm
     // circonférence roues : 0.39m
 
     float currentSpeedR =((( odometryR - _speedWheelR )/ 2248.0f ) * 0.39f)/ (float)(dt-_oldTime);// 2448 ticks per wheel turn
     float currentSpeedL =((( odometryL - _speedWheelL )/2448.0f) *0.39f)/ (float)(dt-_oldTime) ; // same
+
+    float distanceL =     distanceL = (((( odometryL )/2448.0f) *0.39f)); // updating distance value !
+    float distanceR =     distanceR = (((( odometryR )/2448.0f) *0.39f));
+
+
 
     /*if(odometryR = _speedWheelR){ // debug
         currentSpeedR = 0;
@@ -98,7 +107,9 @@ void MainWindow::updateUI(){
     _speedWheelL = odometryL; // update old  speed
      _speedWheelR = odometryR; // update old  speed
     _oldTime = dt; // update old time
-
+    //setting distance :
+    ui->GAUCHE_DISTANCE->display(distanceL);
+    ui->DROITE_DISTANCE->display(distanceR);
 
     //SETTING IR :
 
@@ -118,6 +129,7 @@ void MainWindow::updateUI(){
     ui->HAUT_DROITE->setPalette(palette); // setting palette
     ui->HAUT_DROITE->show(); // updating color !
     palette = ui->HAUT_GAUCHE->palette();
+    // IR thresholds (*4)
     if(IR1 > 100){
         IR1 = 100;
         palette.setColor(QPalette::Highlight, Qt::red); // Qpalette::Highlight is the progress bar color
@@ -127,8 +139,8 @@ void MainWindow::updateUI(){
         palette.setColor(QPalette::Highlight, Qt::green); // Qpalette::Highlight is the progress bar color
 
     }
-    ui->HAUT_GAUCHE->setPalette(palette);
-    ui->HAUT_GAUCHE->show();
+    ui->HAUT_GAUCHE->setPalette(palette); // setting palette
+    ui->HAUT_GAUCHE->show();// updating color !
 
     palette = ui->BAS_DROIT->palette();
     if(IL2 > 85){
@@ -140,8 +152,8 @@ void MainWindow::updateUI(){
         palette.setColor(QPalette::Highlight, Qt::green); // Qpalette::Highlight is the progress bar color
 
     }
-    ui->BAS_DROIT->setPalette(palette);
-    ui->BAS_DROIT->show();
+    ui->BAS_DROIT->setPalette(palette); // setting palette
+    ui->BAS_DROIT->show();// updating color !
 
     palette = ui->BAS_GAUCHE->palette();
     if(IR2 > 80){
@@ -153,18 +165,18 @@ void MainWindow::updateUI(){
         palette.setColor(QPalette::Highlight, Qt::green); // Qpalette::Highlight is the progress bar color
 
     }
-    ui->BAS_GAUCHE->setPalette(palette);
-    ui->BAS_GAUCHE->show();
+    ui->BAS_GAUCHE->setPalette(palette); // setting palette
+    ui->BAS_GAUCHE->show();// updating color !
     // DROITE ET GAUCHE INVERSEE !
-    ui->HAUT_DROITE->setValue(IL1); // set batterie level
-    ui->HAUT_GAUCHE->setValue(IR1); // set batterie level
+    ui->HAUT_DROITE->setValue(IL1); // set ir level
+    ui->HAUT_GAUCHE->setValue(IR1); // set ir level
 
 
 
     //ARRIERE
 
-    ui->BAS_DROIT->setValue(IL2); // set batterie level
-    ui->BAS_GAUCHE->setValue(IR2); // set batterie level
+    ui->BAS_DROIT->setValue(IL2); // set ir level
+    ui->BAS_GAUCHE->setValue(IR2); // set ir level
 
 
 //stopping if we have an ir obstacle :
@@ -172,12 +184,16 @@ void MainWindow::updateUI(){
     case LEFT : {
         if(ui->BAS_GAUCHE->value() == 100 ||ui->HAUT_GAUCHE->value() == 100){
             this->robot.sendMovement(0, 0); // stopping robot;
+            _movementType = STOPPED;
+
         }
         break;
 
     case RIGHT: {
         if(ui->BAS_DROIT->value() == 100 ||ui->HAUT_DROITE->value() == 100){
             this->robot.sendMovement(0, 0); // stopping robot;
+            _movementType = STOPPED;
+
         }
         break;
 
@@ -185,6 +201,7 @@ void MainWindow::updateUI(){
     case BOTTOM : {
         if(ui->BAS_GAUCHE->value() == 100 ||ui->BAS_DROIT->value() == 100){
             this->robot.sendMovement(0, 0); // stopping robot;
+            _movementType = STOPPED;
         }
         break;
 
@@ -192,11 +209,13 @@ void MainWindow::updateUI(){
     case TOP: {
         if(ui->HAUT_GAUCHE->value() == 100 ||ui->HAUT_DROITE->value() == 100){
             this->robot.sendMovement(0, 0); // stopping robot;
+            _movementType = STOPPED;
+
         }
         break;
 
     }
-    case STOPPED: {
+    case STOPPED: { // stopped !
         break;
     }default :  break;
 
@@ -214,19 +233,19 @@ long MainWindow::map(long x, long in_min, long in_max, long out_min, long out_ma
 
 void MainWindow::on_actionSe_d_connecter_triggered()
 {
-    if(robot.getConnected() == true){
+    if(robot.getConnected() == true){ // only disconnect when connected !
         robot.disConnect();
     }
 }
 
-void MainWindow::on_Top_pressed()
+void MainWindow::on_Top_pressed() //
 {
 
     if(_enregistrerState == 1){
         _mov = new movement;
         _mov->speedL = _speed;
         _mov->speedR = _speed;
-        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch(); // setting time
     }
     else {
 
@@ -243,7 +262,8 @@ void MainWindow::on_Top_released()
 {
     if(_enregistrerState == 1){
         // saving sequence
-        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;// saving time (delta)
+
         _sequence.push_back(*_mov);
         std::cout << "time " << _mov->time << std::endl;
     }else {
@@ -264,7 +284,7 @@ void MainWindow::on_bottom_pressed()
         _mov = new movement;
         _mov->speedL = -_speed;
         _mov->speedR = -_speed;
-        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch(); // setting time
 
 
     }
@@ -283,7 +303,8 @@ void MainWindow::on_bottom_released()
     std::cout << "stop going bottom " << std::endl;
     if(_enregistrerState == 1){
     // saving sequence
-    _mov->time =QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;
+    _mov->time =QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;// saving time (delta)
+
 
     _sequence.push_back(*_mov);
     }else {
@@ -302,7 +323,7 @@ void MainWindow::on_left_pressed()
         _mov = new movement;
         _mov->speedL = _speed;
         _mov->speedR = 0;
-        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch(); // setting time
 
     }
     else {
@@ -320,7 +341,8 @@ void MainWindow::on_left_released()
 {
     if(_enregistrerState == 1){
         // saving sequence
-        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;// saving time (delta)
+
 
         _sequence.push_back(*_mov);
         _movementType = STOPPED;
@@ -336,7 +358,7 @@ void MainWindow::on_right_pressed()
         _mov = new movement;
         _mov->speedL = 0;
         _mov->speedR = _speed;
-        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch(); // setting time
 
     }
     else {
@@ -350,7 +372,7 @@ void MainWindow::on_right_released()
 
 {    if(_enregistrerState == 1){
         // saving sequence
-        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;
+        _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time; // saving time (delta)
 
         _sequence.push_back(*_mov);
     }else {
@@ -373,16 +395,14 @@ void MainWindow::on_verticalSlider_sliderMoved(int position)
 {
     this->_speed = position % 241;
     std::cout << "new speed " << this->_speed << std::endl;
-    int maxValue = ui->verticalSlider->maximum();  // Valeur maximale du curseur
-    double normalizedValue = static_cast<double>(_speed) / maxValue;
-
-    int red = static_cast<int>(255 * normalizedValue);
-    int green = static_cast<int>(255 * (1 - normalizedValue));
+    double normalizedValue = map(_speed, ui->verticalSlider->minimum(), ui->verticalSlider->maximum(), 0, 255);
+    int red = static_cast<int>(255-normalizedValue); // red zone
+    int green = static_cast<int>(normalizedValue); // green zone
 
     QString styleSheet = QString("QSlider::handle:vertical { background-color: rgb(%1, %2, %3); }")
                              .arg(red).arg(green).arg(0);
 
-    ui->verticalSlider->setStyleSheet(styleSheet);
+    ui->verticalSlider->setStyleSheet(styleSheet); // modifying slider value
 
 }
 
@@ -425,11 +445,6 @@ float MainWindow::movingAverage(float value){
     }return sum/10;
 //TODO
 }
-
-
-
-
-
 
 
 void MainWindow::on_enregistrer_clicked()
