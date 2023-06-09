@@ -82,9 +82,11 @@ private:
     cameraMove * _cameraMove;
     float _movingAverage[10];
     int _enregistrerState;
+    std::vector<long> _time_between_press;
 
     std::vector<movement> _sequence;
     movement * _mov;
+    MOVEMENT_TYPE _movementType;
 
 
 };

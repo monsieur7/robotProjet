@@ -26,6 +26,8 @@ MainWindow::MainWindow(QWidget *parent) :
         _movingAverage[i] = 0;
     }
     _enregistrerState = 0; // state of enregistrer button
+    _speed = 130; // default value for robot speed
+    _movementType = STOPPED;
 
 
 }
@@ -46,7 +48,7 @@ void MainWindow::on_actionSe_connecter_triggered()
 void MainWindow::updateUI(){
   //  robot.DataReceived;
 // code taken from docs
-    int speedR, speedL, odometryL, odometryR, BatLevelR,CurrentL, CurrentR, VersionR, VersionL, dataL, dataR;
+    int speedR, speedL, odometryL, odometryR;
     uint8_t BatLevelL, IR1, IR2,IL1, IL2;;
 
 
@@ -63,17 +65,12 @@ void MainWindow::updateUI(){
     speedR=(int)(robot.DataReceived.data()[10] << 8) + robot.DataReceived.data()[9];
     if (speedR > 32767) speedR=speedR-65536;
 
-    BatLevelR=0;
     IR1=robot.DataReceived.data()[11];
     IR2=robot.DataReceived.data()[12];
 
     odometryR=((((long)robot.DataReceived.data()[16] << 24))+(((long)robot.DataReceived.data()[15] << 16))+(((long)robot.DataReceived.data()[14] << 8))+((long)robot.DataReceived.data()[13]));
 
-    CurrentL=robot.DataReceived.data()[17];
-    CurrentR=robot.DataReceived.data()[17];
 
-    VersionL=robot.DataReceived.data()[18];
-    VersionR=robot.DataReceived.data()[18];
     int dt = QDateTime::currentDateTime().toMSecsSinceEpoch();
     // DIAMETRE ROUE : 12.5cm
     // circonférence roues : 0.39m
@@ -98,7 +95,6 @@ void MainWindow::updateUI(){
     ui->gauche_lcd->display(currentSpeedL*1000); // displaying left speed in cm/s
     ui->droite_lcd->display(currentSpeedR*1000); // displaying right speed in cm/s
     ui->batterie->setValue(map(BatLevelL, 0, 255, 0, 100)); // set batterie level
-    ui->batterie->setProperty("myBatteryProperty", BatLevelR);
 
     _speedWheelL = odometryL; // update old  speed
      _speedWheelR = odometryR; // update old  speed
@@ -172,6 +168,28 @@ void MainWindow::updateUI(){
     ui->BAS_GAUCHE->setValue(IR2); // set batterie level
 
 
+//stopping if we have an ir obstacle :
+   switch(_movementType){
+    case LEFT : {
+        if(ui->BAS_GAUCHE->value() == 100 || ui->HAUT_GAUCHE == 100){
+            this->robot.sendMovement(0, 0); // stopping robot;
+        }
+    case RIGHT: {
+        if(ui->BAS_DROIT->value() == 100 || ui->HAUT_DROIT == 100){
+            this->robot.sendMovement(0, 0); // stopping robot;
+        }
+    }
+    case BOTTOM : {
+        if(ui->BAS_GAUCHE->value() == 100 || ui->BAS_DROIT == 100){
+            this->robot.sendMovement(0, 0); // stopping robot;
+        }
+    }
+    case TOP: {
+        if(ui->BAS_GAUCHE->value() == 100 || ui->HAUT_GAUCHE == 100){
+            this->robot.sendMovement(0, 0); // stopping robot;
+        }
+    }
+
 
 
 }
@@ -196,9 +214,13 @@ void MainWindow::on_Top_pressed()
         _mov->speedL = _speed;
         _mov->speedR = _speed;
         _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
+    }
+    else {
+
+        robot.sendMovement(_speed,_speed);
+        _movementType = TOP;
 
     }
-    else {robot.sendMovement(_speed,_speed);}
 }
 
 
@@ -213,6 +235,7 @@ void MainWindow::on_Top_released()
         std::cout << "time " << _mov->time << std::endl;
     }else {
         robot.sendMovement(0,0);
+        _movementType = STOPPED;
     }
 }
 
@@ -230,9 +253,11 @@ void MainWindow::on_bottom_pressed()
         _mov->speedR = -_speed;
         _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
 
+
     }
     else {
-    robot.sendMovement(-_speed,-_speed);
+            robot.sendMovement(-_speed,-_speed);
+        _movementType = BOTTOM;
     }
 
 }
@@ -246,9 +271,11 @@ void MainWindow::on_bottom_released()
     if(_enregistrerState == 1){
     // saving sequence
     _mov->time =QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;
+
     _sequence.push_back(*_mov);
     }else {
     robot.sendMovement(0,0);
+    _movementType = STOPPED;
     }
 }
 
@@ -263,9 +290,13 @@ void MainWindow::on_left_pressed()
         _mov->speedL = _speed;
         _mov->speedR = 0;
         _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
+
     }
     else {
+
     robot.sendMovement(_speed,0);
+        _movementType = LEFT;
+
     }
     std::cout << "going left " << std::endl;
 
@@ -277,7 +308,9 @@ void MainWindow::on_left_released()
     if(_enregistrerState == 1){
         // saving sequence
         _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;
+
         _sequence.push_back(*_mov);
+        _movementType = STOPPED;
     }else {
         robot.sendMovement(0,0);
     }
@@ -291,8 +324,11 @@ void MainWindow::on_right_pressed()
         _mov->speedL = 0;
         _mov->speedR = _speed;
         _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch();
+
     }
-    else robot.sendMovement(0,_speed);
+
+     robot.sendMovement(0,_speed);
+    _movementType = RIGHT;
 
 }
 
@@ -301,9 +337,12 @@ void MainWindow::on_right_released()
 {    if(_enregistrerState == 1){
         // saving sequence
         _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;
+
         _sequence.push_back(*_mov);
     }else {
         robot.sendMovement(0,0);
+        _movementType = STOPPED;
+
     }
 }
 
@@ -401,13 +440,15 @@ void MainWindow::on_enregistrer_clicked()
 
 
 void MainWindow::on_executer_clicked()
+
 {
+        if(_enregistrerState == 0){
         if(this->robot.getConnected()){
         this->robot.sendSequence(_sequence);
         std::cout << "sequence has been sent !" << std::endl;
         _sequence.clear();
         this->ui->enregistrer->setStyleSheet("background-color: rgb(255, 255, 255);");
-
+        }
         }
 }
 

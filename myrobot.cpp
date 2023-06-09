@@ -107,6 +107,7 @@ int MyRobot::Crc16(unsigned char *Adresse_tab , unsigned char Taille_max) {
 }
 
 void MyRobot::sendMovement(int left, int right){
+ if(_connected == true){
     DataToSend[2] = abs(left) % 241;
     DataToSend[3] = 0x0;
     DataToSend[4] = abs(right) % 241;
@@ -128,6 +129,7 @@ void MyRobot::sendMovement(int left, int right){
     std::cout << std::hex << "crc" << crc << std::endl;
     DataToSend[7] = crc;
     DataToSend[8] = crc >> 8;
+ }
 }
 
 void MyRobot::sendSequence(std::vector<movement> sequence){

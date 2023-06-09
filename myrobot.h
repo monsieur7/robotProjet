@@ -16,7 +16,16 @@ typedef struct movement {
     int speedL;
     int speedR;
     long time;
+    long time_between_press;
 }movement;
+enum MOVEMENT_TYPE {
+
+    STOPPED,
+    LEFT,
+    RIGHT,
+    TOP,
+    BOTTOM
+};
 class MyRobot : public QObject {
     Q_OBJECT
 public:

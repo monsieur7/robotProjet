@@ -33,5 +33,6 @@ void Login::on_connect_clicked()
     else {
         // quit window
         finished(1);
+        this->close();
     }
 }
