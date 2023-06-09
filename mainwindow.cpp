@@ -384,9 +384,12 @@ void MainWindow::on_enregistrer_clicked()
         if(_enregistrerState == 0){ // button was pressed for saving sequence
             _enregistrerState = 1; // updating state
           _sequence.clear(); // in case not done
+            // changing button color
+            this->ui->enregistrer->setStyleSheet("background-color: red;");
         }
         else if(_enregistrerState == 1){ // button was pressed for ending sequence saving
             _enregistrerState = 0;
+            this->ui->enregistrer->setStyleSheet("background-color: green;");
         }
         //TODO : change color somewhat
         else {
@@ -403,6 +406,8 @@ void MainWindow::on_executer_clicked()
         this->robot.sendSequence(_sequence);
         std::cout << "sequence has been sent !" << std::endl;
         _sequence.clear();
+        this->ui->enregistrer->setStyleSheet("background-color: rgb(255, 255, 255);");
+
         }
 }
 

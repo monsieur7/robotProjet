@@ -14,8 +14,10 @@
    <string>WifiBot</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QMainWindow {background-image : url(&quot;:/main/background/robotBackground.jpg&quot;);}
-</string>
+   <string notr="true">QMainWindow {
+background-image : url(&quot;:/main/background/robotBackground.jpg&quot;);
+}
+QLabel {color:white};</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="gridLayoutWidget">
@@ -155,7 +157,7 @@ QPushButton:pressed {
 }</string>
     </property>
     <property name="minimum">
-     <number>120</number>
+     <number>130</number>
     </property>
     <property name="maximum">
      <number>240</number>
@@ -174,7 +176,7 @@ QPushButton:pressed {
      </rect>
     </property>
     <property name="text">
-     <string>0</string>
+     <string>130</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -187,7 +189,7 @@ QPushButton:pressed {
      </rect>
     </property>
     <property name="text">
-     <string>127</string>
+     <string>240</string>
     </property>
    </widget>
    <widget class="QLCDNumber" name="gauche_lcd">
@@ -309,7 +311,7 @@ QLabel[myBatteryProperty] {
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>500</y>
+      <y>510</y>
       <width>160</width>
       <height>111</height>
      </rect>
@@ -341,7 +343,7 @@ QLabel[myBatteryProperty] {
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>480</y>
+      <y>490</y>
       <width>67</width>
       <height>17</height>
      </rect>
@@ -353,8 +355,8 @@ QLabel[myBatteryProperty] {
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>480</y>
+      <x>280</x>
+      <y>490</y>
       <width>67</width>
       <height>17</height>
      </rect>
@@ -384,6 +386,9 @@ QLabel[myBatteryProperty] {
       <width>67</width>
       <height>17</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>Arrière</string>
@@ -498,6 +503,9 @@ QPushButton:pressed {
       <height>21</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : rgb(255, 255, 255);</string>
+    </property>
     <property name="text">
      <string>enregisrer</string>
     </property>
@@ -510,6 +518,9 @@ QPushButton:pressed {
       <width>81</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : rgb(255, 255, 255);</string>
     </property>
     <property name="text">
      <string>exécuter</string>
