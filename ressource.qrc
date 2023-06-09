@@ -2,4 +2,7 @@
     <qresource prefix="/main/background">
         <file>robotBackground.jpg</file>
     </qresource>
+    <qresource prefix="/">
+        <file>../../Pictures/wifibot-dplp.png</file>
+    </qresource>
 </RCC>

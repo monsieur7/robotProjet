@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>WifiBot</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="ressource.qrc">
+    <normaloff>:/Pictures/wifibot-dplp.png</normaloff>:/Pictures/wifibot-dplp.png</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">background-image : url(&quot;:/main/background/robotBackground.jpg&quot;);
 </string>
@@ -551,7 +555,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>1453</width>
-     <height>22</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -584,6 +588,8 @@ QPushButton:pressed {
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="ressource.qrc"/>
+ </resources>
  <connections/>
 </ui>
