@@ -193,7 +193,7 @@ QPushButton:pressed {
      </rect>
     </property>
     <property name="text">
-     <string>240</string>
+     <string>240 / 3.6 km/h</string>
     </property>
    </widget>
    <widget class="QLCDNumber" name="gauche_lcd">
