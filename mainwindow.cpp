@@ -48,8 +48,13 @@ void MainWindow::on_actionSe_connecter_triggered()
 void MainWindow::updateUI(){
   //  robot.DataReceived;
 // code taken from docs
+<<<<<<< HEAD
     int speedR, speedL, odometryL, odometryR;
     uint8_t BatLevelL, IR1, IR2,IL1, IL2;;
+=======
+    int speedR, speedL, odometryL, odometryR, BatLevelR,CurrentL, CurrentR, VersionR, VersionL, dataL, dataR;
+    uint8_t BatLevelL, IR1, IR2,IL1, IL2;
+>>>>>>> 4b10d4a39620a9994f69de8f5b93447b7cc3a6a1
 
 
 

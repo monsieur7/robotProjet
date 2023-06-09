@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>WifiBot</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="ressource.qrc">
+    <normaloff>:/Pictures/wifibot-dplp.png</normaloff>:/Pictures/wifibot-dplp.png</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">QMainWindow {
 background-image : url(&quot;:/main/background/robotBackground.jpg&quot;);
@@ -418,6 +422,9 @@ QPushButton:pressed {
     <property name="text">
      <string>UP</string>
     </property>
+    <property name="shortcut">
+     <string>Up</string>
+    </property>
    </widget>
    <widget class="QPushButton" name="CAMERA_DOWN">
     <property name="geometry">
@@ -442,6 +449,9 @@ QPushButton:pressed {
     </property>
     <property name="text">
      <string>DOWN</string>
+    </property>
+    <property name="shortcut">
+     <string>Down</string>
     </property>
    </widget>
    <widget class="QPushButton" name="CAMERA_RIGHT">
@@ -468,6 +478,9 @@ QPushButton:pressed {
     <property name="text">
      <string>RIGHT</string>
     </property>
+    <property name="shortcut">
+     <string>Right</string>
+    </property>
    </widget>
    <widget class="QPushButton" name="CAMERA_LEFT">
     <property name="geometry">
@@ -492,6 +505,9 @@ QPushButton:pressed {
     </property>
     <property name="text">
      <string>LEFT</string>
+    </property>
+    <property name="shortcut">
+     <string>Left</string>
     </property>
    </widget>
    <widget class="QPushButton" name="enregistrer">
@@ -574,7 +590,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>1453</width>
-     <height>22</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -607,6 +623,8 @@ QPushButton:pressed {
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="ressource.qrc"/>
+ </resources>
  <connections/>
 </ui>
