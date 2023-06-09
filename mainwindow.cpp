@@ -92,7 +92,8 @@ void MainWindow::updateUI(){
     //TODO  : moving average !
     ui->gauche_lcd->display(currentSpeedL*1000); // displaying left speed in cm/s
     ui->droite_lcd->display(currentSpeedR*1000); // displaying right speed in cm/s
-    ui->batterie->setValue(map(BatLevelL, 0, 255, 0, 100)); // set batterie level
+    ui->batterie->setRange(0, 100); // 10* the battery voltage
+    ui->batterie->setValue(map(BatLevelL, 12, 101, 0, 100)); // set batterie level
 
     _speedWheelL = odometryL; // update old  speed
      _speedWheelR = odometryR; // update old  speed
