@@ -14,7 +14,7 @@
    <string>WifiBot</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(170, 170, 255);
+   <string notr="true">background-image : url(&quot;:/main/background/robotBackground.jpg&quot;);
 </string>
   </property>
   <widget class="QWidget" name="centralWidget">
