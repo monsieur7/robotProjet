@@ -263,7 +263,7 @@ void MainWindow::on_Top_released()
         // saving sequence
         _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;// saving time (delta)
 
-        _sequence.push_back(*_mov);
+        _sequence.push_back(_mov);
         std::cout << "time " << _mov->time << std::endl;
     }else {
         robot.sendMovement(0,0);
@@ -305,7 +305,7 @@ void MainWindow::on_bottom_released()
     _mov->time =QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;// saving time (delta)
 
 
-    _sequence.push_back(*_mov);
+    _sequence.push_back(_mov);
     }else {
     robot.sendMovement(0,0);
     _movementType = STOPPED;
@@ -343,7 +343,7 @@ void MainWindow::on_left_released()
         _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time;// saving time (delta)
 
 
-        _sequence.push_back(*_mov);
+        _sequence.push_back(_mov);
         _movementType = STOPPED;
     }else {
         robot.sendMovement(0,0);
@@ -373,7 +373,7 @@ void MainWindow::on_right_released()
         // saving sequence
         _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch() - _mov->time; // saving time (delta)
 
-        _sequence.push_back(*_mov);
+        _sequence.push_back(_mov);
     }else {
         robot.sendMovement(0,0);
         _movementType = STOPPED;
@@ -470,17 +470,22 @@ void MainWindow::on_enregistrer_clicked()
 void MainWindow::on_executer_clicked()
 
 {
-        if(_enregistrerState == 0){
+        if(_enregistrerState == 0){ // sending dequence
         if(this->robot.getConnected()){
         this->robot.sendSequence(_sequence);
         std::cout << "sequence has been sent !" << std::endl;
-        _sequence.clear();
-        this->ui->enregistrer->setStyleSheet("background-color: rgb(255, 255, 255);");
+        for(movement * i : _sequence){
+            delete [] i; // freeing memory
+        }
+        _sequence.clear(); // reseting sequence array
+
+        this->ui->enregistrer->setStyleSheet("background-color: rgb(255, 255, 255);"); // resetting color
         }
         }
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event){
+        // getting pressed event (keyboard)
         if(event->key() == Qt::Key_Z){
         if(event->type() == QEvent::KeyPress){
         this->on_Top_pressed();
@@ -535,7 +540,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
 
 }
 void MainWindow::keyReleaseEvent(QKeyEvent *event){
-
+    // getting released event (keyboard)
         if(event->key() == Qt::Key_Z){
         if(event->type() == QEvent::KeyRelease){
         this->on_Top_released();

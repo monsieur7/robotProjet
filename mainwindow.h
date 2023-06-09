@@ -86,7 +86,7 @@ private:
     int _enregistrerState;
     std::vector<long> _time_between_press;
 
-    std::vector<movement> _sequence;
+    std::vector<movement * > _sequence;
     movement * _mov;
     MOVEMENT_TYPE _movementType;
 protected:

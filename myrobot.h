@@ -47,7 +47,7 @@ public slots:
     void setPort(QString port);
     void sendMovement(int left, int right);
     bool getConnected();
-    void sendSequence(std::vector<movement> sequence);
+    void sendSequence(std::vector<movement *> sequence);
 private:
     QTcpSocket *socket;
     QTimer *TimerEnvoi;
