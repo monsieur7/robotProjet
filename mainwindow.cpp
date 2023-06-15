@@ -43,7 +43,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionSe_connecter_triggered()
 {
     std::cout << "Menu clicked" << std::endl;
-    login->show();
+    login->show(); // showing login window
 
 }
 
@@ -142,7 +142,7 @@ void MainWindow::updateUI(){
     ui->HAUT_GAUCHE->show();// updating color !
 
     palette = ui->BAS_DROIT->palette();
-    if(IL2 > 85){
+    if(IL2 > 90){
         IL2 = 100;
         palette.setColor(QPalette::Highlight, Qt::red); // Qpalette::Highlight is the progress bar color
 
