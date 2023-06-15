@@ -12,11 +12,13 @@ MainWindow::MainWindow(QWidget *parent) :
     // on connected : show camera ! (only one time
     connect(login, &QDialog::finished, this, [this](int result) {if(result == 1){this->showCamera(QUrl("http://192.168.1.106:8080/?action=stream"));}}); // open camera when the dialog is finished !
     connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI); //update sensor values when data is received
+
     _speedWheelL = 0;
     _speedWheelR = 0;
     _odometryL = 0;
     _odometryR = 0;
     _oldTime = 0;
+
     ui->batterie->setValue(0); // init batterie level;
     ui->BAS_DROIT->setValue(0); // init IR progress bar
     ui->BAS_GAUCHE->setValue(0);
@@ -24,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->HAUT_GAUCHE->setValue(0);
     ui->GAUCHE_DISTANCE->display(0);
     ui->DROITE_DISTANCE->display(0);
+
     _cameraMove = new cameraMove(); // init camera movement
     for(int i = 0; i < 10; i++){ // moving average (todo)
         _movingAverage[i] = 0;
@@ -142,7 +145,7 @@ void MainWindow::updateUI(){
     ui->HAUT_GAUCHE->show();// updating color !
 
     palette = ui->BAS_DROIT->palette();
-    if(IL2 > 90){
+    if(IL2 > 92){
         IL2 = 100;
         palette.setColor(QPalette::Highlight, Qt::red); // Qpalette::Highlight is the progress bar color
 
@@ -234,6 +237,9 @@ void MainWindow::on_actionSe_d_connecter_triggered()
 {
     if(robot.getConnected() == true){ // only disconnect when connected !
         robot.disConnect();
+        ui->gridLayout_2->removeWidget(this->webView); // removing camera widget
+        delete webView;
+        // remove camera !
     }
 }
 

@@ -46,13 +46,13 @@ bool MyRobot::disConnect() {
     return true;
 }
 
-void MyRobot::connected() {
+void MyRobot::connected() { //debug
     qDebug() << "connected..."; // Hey server, tell me about you.
 }
 bool MyRobot::getConnected(){
     return _connected;
 }
-void MyRobot::disconnected() {
+void MyRobot::disconnected() { // debug
     qDebug() << "disconnected...";
 }
 
@@ -84,7 +84,7 @@ void MyRobot::setIpAddress(QString ip){
     _ip = ip;
 }
 
-int MyRobot::Crc16(unsigned char *Adresse_tab , unsigned char Taille_max) {
+int MyRobot::Crc16(unsigned char *Adresse_tab , unsigned char Taille_max) { // CRC
     unsigned int Crc = 0xFFFF;
     unsigned int Polynome = 0xA001;
     unsigned int CptOctet = 0;
