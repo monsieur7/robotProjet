@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     login = new Login(nullptr, &robot);
     // on connected : show camera ! (only one time
     connect(login, &QDialog::finished, this, [this](int result) {if(result == 1){this->showCamera(QUrl("http://192.168.1.106:8080/?action=stream"));}}); // open camera when the dialog is finished !
-    connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI);
+    connect(&robot, &MyRobot::updateUI, this, &MainWindow::updateUI); //update sensor values when data is received
     _speedWheelL = 0;
     _speedWheelR = 0;
     _odometryL = 0;
@@ -52,8 +52,8 @@ void MainWindow::updateUI(){
   //  robot.DataReceived;
 // code taken from docs
     int speedR, speedL, odometryL, odometryR;
-    uint8_t BatLevelL, IR1, IR2,IL1, IL2;;
-
+    uint8_t BatLevelL, IR1, IR2,IL1, IL2;
+    //gedding values
     speedL=(int)((robot.DataReceived.data()[1] << 8) + robot.DataReceived.data()[0]);
     if (speedL > 32767) speedL=speedL-65536;
 
@@ -237,7 +237,7 @@ void MainWindow::on_actionSe_d_connecter_triggered()
     }
 }
 
-void MainWindow::on_Top_pressed() //
+void MainWindow::on_Top_pressed() //saving sequence
 {
 
     if(_enregistrerState == 1){
@@ -247,7 +247,7 @@ void MainWindow::on_Top_pressed() //
         _mov->time = QDateTime::currentDateTime().toSecsSinceEpoch(); // setting time
     }
     else {
-
+        //stopping robot
         robot.sendMovement(_speed,_speed);
         _movementType = TOP;
 
@@ -266,6 +266,7 @@ void MainWindow::on_Top_released()
         _sequence.push_back(_mov);
         std::cout << "time " << _mov->time << std::endl;
     }else {
+        //stopping robot
         robot.sendMovement(0,0);
         _movementType = STOPPED;
     }
@@ -276,10 +277,10 @@ void MainWindow::on_Top_released()
 
 void MainWindow::on_bottom_pressed()
 {
-
+//
 
     std::cout << "going bottom " << std::endl;
-    if(_enregistrerState == 1){
+    if(_enregistrerState == 1){ // saving sequence
         _mov = new movement;
         _mov->speedL = -_speed;
         _mov->speedR = -_speed;
@@ -287,8 +288,8 @@ void MainWindow::on_bottom_pressed()
 
 
     }
-    else {
-            robot.sendMovement(-_speed,-_speed);
+    else { //moving robot
+         robot.sendMovement(-_speed,-_speed);
         _movementType = BOTTOM;
     }
 
@@ -306,7 +307,7 @@ void MainWindow::on_bottom_released()
 
 
     _sequence.push_back(_mov);
-    }else {
+    }else { // stopping robot
     robot.sendMovement(0,0);
     _movementType = STOPPED;
     }
@@ -389,10 +390,10 @@ void MainWindow::showCamera(QUrl url){
     webView->load(url);
     ui->gridLayout_2->addWidget(webView);
 }
-
+// on speed slider moved
 void MainWindow::on_verticalSlider_sliderMoved(int position)
 {
-    this->_speed = position % 241;
+    this->_speed = position % 241; // capping the value at 241
     std::cout << "new speed " << this->_speed << std::endl;
     double normalizedValue = map(_speed, ui->verticalSlider->minimum(), ui->verticalSlider->maximum(), 0, 255);
     int red = static_cast<int>(255-normalizedValue); // red zone
@@ -405,7 +406,7 @@ void MainWindow::on_verticalSlider_sliderMoved(int position)
 
 }
 
-
+// arrows key for camera movement
 void MainWindow::on_CAMERA_DOWN_pressed()
 {
     _cameraMove->moveCameraDown();
@@ -433,7 +434,7 @@ void MainWindow::on_CAMERA_UP_pressed()
 
 }
 
-float MainWindow::movingAverage(float value){
+float MainWindow::movingAverage(float value){ // not used
     for(int i = 1; i <= 9; i++){
         _movingAverage[i] = _movingAverage[i-1]; // shift every value by 1 pos
     }
@@ -541,6 +542,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
 }
 void MainWindow::keyReleaseEvent(QKeyEvent *event){
     // getting released event (keyboard)
+       // if the key is released (zqsd)  stopping the robot / saving it in sequence
         if(event->key() == Qt::Key_Z){
         if(event->type() == QEvent::KeyRelease){
         this->on_Top_released();
@@ -560,7 +562,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event){
         if(event->type() == QEvent::KeyRelease){
         this->on_right_released();
         }
-
+    // no camera key because we move the camera when we press on the key
         }
 
 }
