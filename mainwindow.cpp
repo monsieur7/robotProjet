@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->on_verticalSlider_sliderMoved(ui->verticalSlider->minimum()); // setting min value and color for speed color
     _movementType = STOPPED; // default value
 
-
+this->setFocusPolicy(Qt::StrongFocus); // fix for arrows key on linux not registering  (keyboard focus)
 }
 MainWindow::~MainWindow()
 {
@@ -522,6 +522,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
         if(event->key() == Qt::Key_Up){
         if(event->type() == QEvent::KeyPress){
         this->_cameraMove->moveCameraUp();
+
         }
 
         }
