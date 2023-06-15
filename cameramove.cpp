@@ -1,7 +1,7 @@
 #include "cameramove.h"
 cameraMove::cameraMove()
 {
-    _networkManager = new QNetworkAccessManager();
+    _networkManager = new QNetworkAccessManager(); // in order to send network requests
 
 }
 void cameraMove::moveCameraDown(){
