@@ -230,7 +230,7 @@ QPushButton:pressed {
     <property name="geometry">
      <rect>
       <x>690</x>
-      <y>39</y>
+      <y>20</y>
       <width>20</width>
       <height>361</height>
      </rect>
@@ -253,8 +253,8 @@ QPushButton:pressed {
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>690</x>
-      <y>400</y>
+      <x>680</x>
+      <y>380</y>
       <width>49</width>
       <height>16</height>
      </rect>
@@ -266,8 +266,8 @@ QPushButton:pressed {
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>690</x>
-      <y>20</y>
+      <x>680</x>
+      <y>0</y>
       <width>151</width>
       <height>16</height>
      </rect>
@@ -667,6 +667,32 @@ QPushButton:pressed {
       <width>64</width>
       <height>23</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_13">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>400</y>
+      <width>67</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Vitesse</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_14">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>530</y>
+      <width>81</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Odométrie</string>
     </property>
    </widget>
   </widget>
